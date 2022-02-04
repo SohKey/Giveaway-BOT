@@ -18,13 +18,13 @@
 ## Install
 
 ```bash
-$ git clone adress #clone repository
-$ nano NFT-Giveaway-BOT\code\tools\config.ini
+$ git clone https://github.com/SohKey/NFT-Giveaway-BOT.git #clone repository
+$ nano NFT-Giveaway-BOT\code\tools\config.ini #Edit account configuration and more !
 $ enter your Reddit id and pass | API name, id and secret | NFT Wallet
 ```
 
 ## Usage
 
 ```bash
-$ launch start.bat
+$ Launch start.bat
 ```
