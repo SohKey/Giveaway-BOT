@@ -13,21 +13,18 @@
 # Requirements
 
 - Python >= 10
-- Window 10 and more
+- Window 10 + #Curently not updated for linux
 
 ## Install
 
 ```bash
-$ git clone https://github.com/aresrpg/aresrpg
-$ cd aresrpg
-$ git submodule update --init
-$ npm install
+$ git clone adress #clone repository
+$ nano NFT-Giveaway-BOT\code\tools\config.ini
+$ enter your Reddit id and pass | API name, id and secret | NFT Wallet
 ```
 
 ## Usage
 
 ```bash
-$ npm start
-# Start with packet logging
-$ DEBUG="minecraft-protocol*" npm start
+$ launch start.bat
 ```
