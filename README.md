@@ -13,7 +13,7 @@
 # Requirements
 
 - Python >= 10
-- Window 10 + #Curently not updated for linux
+- Window 10 + ```bash #Curently not updated for linux ```
 
 ## Install
 
