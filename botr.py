@@ -189,7 +189,7 @@ praw_api = praw.Reddit(
 psaw_api = PushshiftAPI()
 submissions = psaw_api.search_submissions(
     subreddit=REDDIT_SUBS,
-    q="GIVEAWAY|Giveaway|giveaway|NFT Giveaway",
+    q="GIVEAWAY | Giveaway | giveaway | Free NFT | free NFT | free nft",
     filter=["id"],
 )
 
