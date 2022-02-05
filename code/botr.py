@@ -124,6 +124,7 @@ while x != 1:
     except:
         print(f"{Fore.RED}[{Fore.LIGHTWHITE_EX}!{Fore.RED}] {Fore.LIGHTRED_EX}Saisie invalide ! {fontS.END}")
         print(f"{Fore.RED}__"*60)
+        x = 1
     else:
         x = 1
 
