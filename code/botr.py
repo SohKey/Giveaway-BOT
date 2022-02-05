@@ -117,22 +117,24 @@ while x != 1:
     try:
         compte = int(input(f"{Fore.LIGHTCYAN_EX}Choisir le bot n° {Fore.LIGHTYELLOW_EX}| {Fore.CYAN}1 {Fore.LIGHTYELLOW_EX}| {Fore.CYAN}2 {Fore.LIGHTYELLOW_EX}| {Fore.CYAN}3 {Fore.LIGHTYELLOW_EX}| : {Fore.LIGHTMAGENTA_EX}"))
         compte = Ncompte[compte]
-        print(compte)
         API_REDDIT_CLIENT_ID = eval(cfg[compte]["API_REDDIT_CLIENT_ID"])
         API_REDDIT_CLIENT_SECRET = eval(cfg[compte]["API_REDDIT_CLIENT_SECRET"])
         API_REDDIT_USERNAME = eval(cfg[compte]["API_REDDIT_USERNAME"])
         API_REDDIT_USER_AGENT = eval(cfg[compte]["API_REDDIT_USER_AGENT"])
         API_REDDIT_PASSWORD = eval(cfg[compte]["API_REDDIT_PASSWORD"])
     except KeyError:
-        print(f"{Fore.RED}[{Fore.LIGHTWHITE_EX}!{Fore.RED}] {Fore.LIGHTRED_EX}Le compte n'existe pas ! {fontS.END}")
-        print(f"{Fore.RED}__"*60)
+        if(compte not in Ncompte):
+            print(f"{Fore.RED}[{Fore.LIGHTWHITE_EX}!{Fore.RED}] {Fore.LIGHTRED_EX}Le compte n'existe pas ! {fontS.END}")
+            print(f"{Fore.RED}__"*60)
+        else:
+            x = 1
     except ValueError:
         print(f"{Fore.RED}[{Fore.LIGHTWHITE_EX}!{Fore.RED}] {Fore.LIGHTRED_EX}Saisie invalide, il faut saisir un chiffre ! {fontS.END}")
         print(f"{Fore.RED}__"*60)
     else:
         x = 1
 
-NoCompte = f"""{fontS.BOLD}{Fore.LIGHTRED_EX}{compte}"""
+NoCompte = f"{fontS.BOLD}{Fore.LIGHTRED_EX}{compte}"
 print(NoCompte)
 
 OPENSEA_WALLET = eval(cfg["Bot"]["OPENSEA_WALLET"])
