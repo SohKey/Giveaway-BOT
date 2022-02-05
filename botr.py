@@ -18,28 +18,33 @@ if my_os != "linux":
         os.system("pip install requests")
         os.system("pip install praw")
         os.system("cls")
+    else:
         print("time,praw,random : OK")
     try:
         from pystyle import Center, Anime, Colors, Colorate  # pip install pystyle
     except:
         os.system("pip install pystyle")
         os.system("cls")
+    else:
         print("pystyle: OK")
     try:
         from colorama import init, Fore  # pip install colorama
     except:
         os.system("pip install colorama")
         os.system("cls")
+    else:
         print("colorama: OK")
     try:
         from psaw import PushshiftAPI
     except:
         os.system("pip install psaw")
+    else:
         print("psaw: OK")
     try:
         from datetime import datetime
     except:
         os.system("pip install datetime")
+    else:
         print("datetime: OK")
 else:
     try:
@@ -48,30 +53,35 @@ else:
         os.system("pip3 install requests")
         os.system("pip3 install praw")
         os.system("reset")
+    else:
         print("time,praw,random: OK")
     try:
         from pystyle import Center, Anime, Colors, Colorate  # pip install pystyle
     except:
         os.system("pip3 install pystyle")
         os.system("reset")
+    else:
         print("pystyle: OK")
     try:
         from colorama import init, Fore  # pip install colorama
     except:
         os.system("pip3 install colorama")
         os.system("reset")
+    else:
         print("colorama: OK")
     try:
         from psaw import PushshiftAPI
     except:
         os.system("pip3 install psaw")
+    else:
         print("psaw: OK")
     try:
         from datetime import datetime
     except:
         os.system("pip3 install datetime")
         print("datetime: OK")
-    print("Pip install's with linux: OK")
+    else:
+        print("Pip install's with linux: OK")
 
 
 init()
