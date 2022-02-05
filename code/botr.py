@@ -123,11 +123,8 @@ while x != 1:
         API_REDDIT_USER_AGENT = eval(cfg[compte]["API_REDDIT_USER_AGENT"])
         API_REDDIT_PASSWORD = eval(cfg[compte]["API_REDDIT_PASSWORD"])
     except:
-        if(my_os == "linux" or "Linux"):
-            x=1
-        else:
-            print(f"{Fore.RED}[{Fore.LIGHTWHITE_EX}!{Fore.RED}] {Fore.LIGHTRED_EX}Saisie invalide ! {fontS.END}")
-            print(f"{Fore.RED}__"*60)
+        print(f"{Fore.RED}[{Fore.LIGHTWHITE_EX}!{Fore.RED}] {Fore.LIGHTRED_EX}Saisie invalide ! {fontS.END}")
+        print(f"{Fore.RED}__"*60)
     else:
         x = 1
 
