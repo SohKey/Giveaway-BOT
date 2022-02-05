@@ -11,7 +11,7 @@ except:
     time.sleep(4)
     sys.exit()
 
-if my_os.find("win"):
+if my_os != "linux":
     try:
         import time,praw,random
     except:
