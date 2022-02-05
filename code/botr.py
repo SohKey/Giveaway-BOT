@@ -1,8 +1,4 @@
-import os
-import re
-import warnings
-import configparser
-import sys
+import os,re,warnings,configparser,sys
 
 my_os = sys.platform
 print("Currently on ",my_os)
@@ -17,9 +13,7 @@ except:
 
 if my_os.find("win"):
     try:
-        import time
-        import praw
-        import random  # pip install requests, praw
+        import time,praw,random
     except:
         os.system("pip install requests")
         os.system("pip install praw")
@@ -44,9 +38,7 @@ if my_os.find("win"):
         os.system("pip install datetime")
 else:
     try:
-        import time
-        import praw
-        import random  # pip install requests, praw
+        import time,praw,random
     except:
         os.system("pip3 install requests")
         os.system("pip3 install praw")
