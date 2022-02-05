@@ -137,6 +137,9 @@ while x != 1:
 NoCompte = f"{fontS.BOLD}{Fore.LIGHTRED_EX}{compte}"
 print(NoCompte)
 
+cfg = configparser.RawConfigParser()
+cfg.read("tools\config.ini")
+
 OPENSEA_WALLET = eval(cfg["Bot"]["OPENSEA_WALLET"])
 MAX_GIVEAWAYS = eval(cfg["Bot"]["MAX_GIVEAWAYS"])
 MIN_GIVEAWAYS = eval(cfg["Bot"]["MIN_GIVEAWAYS"])
