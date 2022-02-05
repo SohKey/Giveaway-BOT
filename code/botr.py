@@ -61,6 +61,7 @@ else:
         from datetime import datetime
     except:
         os.system("pip3 install datetime")
+    print("Pip install's with linux: OK")
 
 
 init()
