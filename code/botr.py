@@ -68,7 +68,10 @@ init()
 warnings.filterwarnings("ignore")
 cnt = 1
 cfg = configparser.RawConfigParser()
-cfg.read("config.ini")
+if my_os != "linux":
+    cfg.read("tools\config.ini")
+else:
+    cfg.read("tools/config.ini")
 
 banner = r"""	
 
@@ -173,7 +176,10 @@ except Exception as err:
     print("")
     for i in range(5):
         time.sleep(1)
-        os.system("cls")
+        if my_os != "linux":
+            os.system("cls")
+        else:
+            os.system("reset")
         print(f"[{Fore.WHITE}!{Fore.RED}] ", cd)
         cd -= 1
     time.sleep(1)
@@ -189,8 +195,13 @@ submissions = psaw_api.search_submissions(
     filter=["id"],
 )
 
-with open("misc\COM.txt", "r") as com:
-    AllAutors = com.readline()
+if my_os != "linux":
+    with open("misc\COM.txt", "r") as com:
+        AllAutors = com.readline()
+else:
+    with open("misc/COM.txt", "r") as com:
+        AllAutors = com.readline()
+
 
 n_giveaways_found = 1
 
@@ -264,10 +275,17 @@ while True:
             time.sleep(secs_to_wait)
             n_giveaways_found += 1
             cnt += 1
-            com = open("misc\COM.txt", "a")
-            com.write(submission.id+"\n")
-            with open("misc\COM.txt", "r") as com:
-                AllAutors = com.readline()
+            
+            if my_os != "linux":
+                com = open("misc\COM.txt", "a")
+                com.write(submission.id+"\n")
+                with open("misc\COM.txt", "r") as com:
+                    AllAutors = com.readline()
+            else:
+                com = open("misc/COM.txt", "a")
+                com.write(submission.id+"\n")
+                with open("misc/COM.txt", "r") as com:
+                    AllAutors = com.readline()
 
         if n_giveaways_found > Nb_Giveaway:
             pause = random.randint(MIN_BIG_SLEEP, MAX_BIG_SLEEP)
