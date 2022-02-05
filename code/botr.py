@@ -1,28 +1,75 @@
-import os, re, warnings, configparser, sys
-try:
-    import time, praw, random #pip install requests, praw
+import os
+import re
+import warnings
+import configparser
+import sys
+
+my_os = sys.platform
+print("Currently on ",my_os)
+try :
+    assert sys.version_info >= (3,)
+    print("Python version check: ok")
 except:
-    os.system("pip install requests")
-    os.system("pip install praw")
-    os.system("cls")
-try:
-    from pystyle import Center, Anime, Colors, Colorate #pip install pystyle
-except:
-    os.system("pip install pystyle")
-    os.system("cls")
-try:
-    from colorama import init, Fore #pip install colorama
-except:
-    os.system("pip install colorama")
-    os.system("cls")
-try:
-    from psaw import PushshiftAPI
-except:
-    os.system("pip install psaw")
-try:
-    from datetime import datetime
-except:
-    os.system("pip install datetime")
+    print("Version de Python < 3")
+    print("Mettre a jour la version !")
+    time.sleep(4)
+    sys.exit()
+
+if my_os.find("win"):
+    try:
+        import time
+        import praw
+        import random  # pip install requests, praw
+    except:
+        os.system("pip install requests")
+        os.system("pip install praw")
+        os.system("cls")
+    try:
+        from pystyle import Center, Anime, Colors, Colorate  # pip install pystyle
+    except:
+        os.system("pip install pystyle")
+        os.system("cls")
+    try:
+        from colorama import init, Fore  # pip install colorama
+    except:
+        os.system("pip install colorama")
+        os.system("cls")
+    try:
+        from psaw import PushshiftAPI
+    except:
+        os.system("pip install psaw")
+    try:
+        from datetime import datetime
+    except:
+        os.system("pip install datetime")
+else:
+    try:
+        import time
+        import praw
+        import random  # pip install requests, praw
+    except:
+        os.system("pip3 install requests")
+        os.system("pip3 install praw")
+        os.system("reset")
+    try:
+        from pystyle import Center, Anime, Colors, Colorate  # pip install pystyle
+    except:
+        os.system("pip3 install pystyle")
+        os.system("reset")
+    try:
+        from colorama import init, Fore  # pip install colorama
+    except:
+        os.system("pip3 install colorama")
+        os.system("reset")
+    try:
+        from psaw import PushshiftAPI
+    except:
+        os.system("pip3 install psaw")
+    try:
+        from datetime import datetime
+    except:
+        os.system("pip3 install datetime")
+
 
 init()
 warnings.filterwarnings("ignore")
@@ -59,32 +106,37 @@ banner = r"""
         ╚═════╝  ╚═════╝    ╚═╝       ╚═╝  ╚═══╝╚═╝        ╚═╝   
 """[1:]
 
-Anime.Fade(Center.Center(banner), Colors.blue_to_purple, Colorate.Horizontal, enter=True)
+Anime.Fade(Center.Center(banner), Colors.blue_to_purple,
+           Colorate.Horizontal, enter=True)
 print(banner)
 
+
 class fontS:
-   BOLD = '\033[1m'
-   UNDERLINE = '\033[4m'
-   END = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+    END = '\033[0m'
 
-Ncompte = ["","COMPTE1","COMPTE2","COMPTE3"]
 
-x=0
+Ncompte = ["", "COMPTE1", "COMPTE2", "COMPTE3"]
+
+x = 0
 while x != 1:
     try:
         compte = int(input(f"{Fore.LIGHTCYAN_EX}Choisir le bot n° {Fore.LIGHTYELLOW_EX}| {Fore.CYAN}1 {Fore.LIGHTYELLOW_EX}| {Fore.CYAN}2 {Fore.LIGHTYELLOW_EX}| {Fore.CYAN}3 {Fore.LIGHTYELLOW_EX}| : {Fore.LIGHTMAGENTA_EX}"))
         compte = Ncompte[compte]
         API_REDDIT_CLIENT_ID = eval(cfg[compte]["API_REDDIT_CLIENT_ID"])
-        API_REDDIT_CLIENT_SECRET = eval(cfg[compte]["API_REDDIT_CLIENT_SECRET"])
+        API_REDDIT_CLIENT_SECRET = eval(
+            cfg[compte]["API_REDDIT_CLIENT_SECRET"])
         API_REDDIT_USERNAME = eval(cfg[compte]["API_REDDIT_USERNAME"])
         API_REDDIT_USER_AGENT = eval(cfg[compte]["API_REDDIT_USER_AGENT"])
         API_REDDIT_PASSWORD = eval(cfg[compte]["API_REDDIT_PASSWORD"])
     except:
-        print(f"{Fore.RED}[{Fore.LIGHTWHITE_EX}!{Fore.RED}] {Fore.LIGHTRED_EX}Saisie invalide ! {fontS.END}")
+        print(
+            f"{Fore.RED}[{Fore.LIGHTWHITE_EX}!{Fore.RED}] {Fore.LIGHTRED_EX}Saisie invalide ! {fontS.END}")
         print(f"{Fore.RED}__"*60)
     else:
-        x=1
-    
+        x = 1
+
 os.system("cls")
 NoCompte = f"""{fontS.BOLD}{Fore.LIGHTRED_EX}{compte}"""
 print(NoCompte)
@@ -115,9 +167,11 @@ try:
     commentd.upvote()
 except Exception as err:
     if str(err) == f"received 403 HTTP response":
-        print(f"{Fore.RED}---------------------------------\n[{Fore.WHITE}Alerte{Fore.RED}] Compte bannis de Reddit !")
+        print(
+            f"{Fore.RED}---------------------------------\n[{Fore.WHITE}Alerte{Fore.RED}] Compte bannis de Reddit !")
     else:
-        print(f"{Fore.RED}---------------------------------\n[{Fore.WHITE}Alerte{Fore.RED}] Les informations du compte ne sont pas valides !")
+        print(
+            f"{Fore.RED}---------------------------------\n[{Fore.WHITE}Alerte{Fore.RED}] Les informations du compte ne sont pas valides !")
     time.sleep(2)
     print("---------------------------------")
     time.sleep(2)
@@ -127,8 +181,8 @@ except Exception as err:
     for i in range(5):
         time.sleep(1)
         os.system("cls")
-        print(f"[{Fore.WHITE}!{Fore.RED}] " ,cd)
-        cd-=1
+        print(f"[{Fore.WHITE}!{Fore.RED}] ", cd)
+        cd -= 1
     time.sleep(1)
     sys.exit()
 
@@ -137,12 +191,12 @@ print(f"Debut de session de {Nb_Giveaway} commentaires !")
 
 psaw_api = PushshiftAPI()
 submissions = psaw_api.search_submissions(
-    subreddit= REDDIT_SUBS,
-    q= "GIVEAWAY | Giveaway | giveaway | Free NFT | free NFT | free nft | Drop Wallet",
+    subreddit=REDDIT_SUBS,
+    q="GIVEAWAY | Giveaway | giveaway | Free NFT | free NFT | free nft | Drop Wallet",
     filter=["id"],
 )
 
-with open("misc\COM.txt","r") as com:
+with open("misc\COM.txt", "r") as com:
     AllAutors = com.readline()
 
 n_giveaways_found = 1
@@ -179,10 +233,14 @@ while True:
                 continue
             now = datetime.now()
             current_time = now.strftime("%H:%M:%S")
-            print(f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} Comment {Fore.LIGHTBLACK_EX}#{Fore.LIGHTWHITE_EX} {cnt}")
-            print(f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} Current Time:{Fore.WHITE} {current_time}")
-            print(f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} URL: {Fore.LIGHTBLUE_EX} {submission.url}")
-            print(f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} Title:{Fore.LIGHTBLACK_EX} {submission.title}")
+            print(
+                f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} Comment {Fore.LIGHTBLACK_EX}#{Fore.LIGHTWHITE_EX} {cnt}")
+            print(
+                f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} Current Time:{Fore.WHITE} {current_time}")
+            print(
+                f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} URL: {Fore.LIGHTBLUE_EX} {submission.url}")
+            print(
+                f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} Title:{Fore.LIGHTBLACK_EX} {submission.title}")
 
             submission.upvote()
 
@@ -200,26 +258,26 @@ while True:
                         opensea_url = opensea_url.split("]")[0]
                     if ")" in opensea_url:
                         opensea_url = opensea_url.split(")")[0]
-                    print(f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} OPENSEA: ", opensea_url)
+                    print(
+                        f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} OPENSEA: ", opensea_url)
                     print(f"{Fore.RED}__"*60)
 
-
             except:
-                print(f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} No Opensea URL")
+                print(
+                    f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} No Opensea URL")
                 print(f"{Fore.RED}__"*60)
-
 
             secs_to_wait = random.randint(MIN_SECS_SLEEP, MAX_SECS_SLEEP)
             time.sleep(secs_to_wait)
             n_giveaways_found += 1
             cnt += 1
-            com = open("misc\COM.txt","a")   
+            com = open("misc\COM.txt", "a")
             com.write(submission.id+"\n")
-            with open("misc\COM.txt","r") as com:
+            with open("misc\COM.txt", "r") as com:
                 AllAutors = com.readline()
-                
+
         if n_giveaways_found > Nb_Giveaway:
-            pause = random.randint(MIN_BIG_SLEEP,MAX_BIG_SLEEP)
+            pause = random.randint(MIN_BIG_SLEEP, MAX_BIG_SLEEP)
             print(f"Pause de {pause} secondes")
             time.sleep(pause)
             n_giveaways_found = 1
@@ -227,11 +285,8 @@ while True:
             print(f"Debut de session de {Nb_Giveaway} commentaires !")
             print(f"{Fore.RED}__"*60)
 
-
     except:
         now = datetime.now()
         current_time = now.strftime("%H:%M:%S")
         print(f"{Fore.WHITE}{current_time} | No Giveaway!")
         print(f"{Fore.RED}__"*60)
-
-
