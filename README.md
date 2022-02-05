@@ -12,7 +12,8 @@
 
 # Requirements
 
-- Python >= 3
+- Python >= 3 ```apt install python3-pip```
+- Pip
 
 ## Install
 
