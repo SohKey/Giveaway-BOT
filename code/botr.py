@@ -122,8 +122,11 @@ while x != 1:
         API_REDDIT_USERNAME = eval(cfg[compte]["API_REDDIT_USERNAME"])
         API_REDDIT_USER_AGENT = eval(cfg[compte]["API_REDDIT_USER_AGENT"])
         API_REDDIT_PASSWORD = eval(cfg[compte]["API_REDDIT_PASSWORD"])
-    except:
-        print(f"{Fore.RED}[{Fore.LIGHTWHITE_EX}!{Fore.RED}] {Fore.LIGHTRED_EX}Saisie invalide ! {fontS.END}")
+    except KeyError:
+        print(f"{Fore.RED}[{Fore.LIGHTWHITE_EX}!{Fore.RED}] {Fore.LIGHTRED_EX}Le compte n'existe pas ! {fontS.END}")
+        print(f"{Fore.RED}__"*60)
+    except ValueError:
+        print(f"{Fore.RED}[{Fore.LIGHTWHITE_EX}!{Fore.RED}] {Fore.LIGHTRED_EX}Saisie invalide, il faut saisir un chiffre ! {fontS.END}")
         print(f"{Fore.RED}__"*60)
     else:
         x = 1
