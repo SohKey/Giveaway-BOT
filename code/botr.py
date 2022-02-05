@@ -137,8 +137,9 @@ while x != 1:
 NoCompte = f"{fontS.BOLD}{Fore.LIGHTRED_EX}{compte}"
 print(NoCompte)
 
-cfg = configparser.RawConfigParser()
-cfg.read("tools\config.ini")
+REDDIT_SUBS = eval(cfg["Reddit"]["REDDIT_SUBS"])
+REDDIT_COMMENTS = eval(cfg["Reddit"]["REDDIT_COMMENTS"])
+REDDIT_EMOJIS = eval(cfg["Reddit"]["REDDIT_EMOJIS"])
 
 OPENSEA_WALLET = eval(cfg["Bot"]["OPENSEA_WALLET"])
 MAX_GIVEAWAYS = eval(cfg["Bot"]["MAX_GIVEAWAYS"])
@@ -147,10 +148,6 @@ MIN_SECS_SLEEP = eval(cfg["Bot"]["MIN_SECS_SLEEP"])
 MAX_SECS_SLEEP = eval(cfg["Bot"]["MAX_SECS_SLEEP"])
 MIN_BIG_SLEEP = eval(cfg["Bot"]["MIN_BIG_SLEEP"])
 MAX_BIG_SLEEP = eval(cfg["Bot"]["MAX_BIG_SLEEP"])
-
-REDDIT_SUBS = eval(cfg["Reddit"]["REDDIT_SUBS"])
-REDDIT_COMMENTS = eval(cfg["Reddit"]["REDDIT_COMMENTS"])
-REDDIT_EMOJIS = eval(cfg["Reddit"]["REDDIT_EMOJIS"])
 
 
 praw_api = praw.Reddit(
