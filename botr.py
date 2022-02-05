@@ -141,10 +141,6 @@ while x != 1:
         compte = int(input(f"{Fore.LIGHTCYAN_EX}Choisir le bot n° {Fore.LIGHTYELLOW_EX}| {Fore.CYAN}1 {Fore.LIGHTYELLOW_EX}| {Fore.CYAN}2 {Fore.LIGHTYELLOW_EX}| {Fore.CYAN}3 {Fore.LIGHTYELLOW_EX}| : {Fore.LIGHTMAGENTA_EX}"))
         compte = Ncompte[compte]
         API_REDDIT_CLIENT_ID = eval(cfg[compte]["API_REDDIT_CLIENT_ID"])
-        API_REDDIT_CLIENT_SECRET = eval(cfg[compte]["API_REDDIT_CLIENT_SECRET"])
-        API_REDDIT_USERNAME = eval(cfg[compte]["API_REDDIT_USERNAME"])
-        API_REDDIT_USER_AGENT = eval(cfg[compte]["API_REDDIT_USER_AGENT"])
-        API_REDDIT_PASSWORD = eval(cfg[compte]["API_REDDIT_PASSWORD"])
     except KeyError:
         print(f"{Fore.RED}[{Fore.LIGHTWHITE_EX}!{Fore.RED}] {Fore.LIGHTRED_EX}Le compte n'existe pas ! {fontS.END}")
         print(f"{Fore.RED}__"*60)
@@ -156,6 +152,12 @@ while x != 1:
 
 NoCompte = f"{fontS.BOLD}{Fore.LIGHTRED_EX}{compte}"
 print(NoCompte)
+
+API_REDDIT_CLIENT_ID = eval(cfg[compte]["API_REDDIT_CLIENT_ID"])
+API_REDDIT_CLIENT_SECRET = eval(cfg[compte]["API_REDDIT_CLIENT_SECRET"])
+API_REDDIT_USERNAME = eval(cfg[compte]["API_REDDIT_USERNAME"])
+API_REDDIT_USER_AGENT = eval(cfg[compte]["API_REDDIT_USER_AGENT"])
+API_REDDIT_PASSWORD = eval(cfg[compte]["API_REDDIT_PASSWORD"])
 
 REDDIT_SUBS = eval(cfg["Reddit"]["REDDIT_SUBS"])
 REDDIT_COMMENTS = eval(cfg["Reddit"]["REDDIT_COMMENTS"])
@@ -169,13 +171,19 @@ MAX_SECS_SLEEP = eval(cfg["Bot"]["MAX_SECS_SLEEP"])
 MIN_BIG_SLEEP = eval(cfg["Bot"]["MIN_BIG_SLEEP"])
 MAX_BIG_SLEEP = eval(cfg["Bot"]["MAX_BIG_SLEEP"])
 
-
 praw_api = praw.Reddit(
     client_id=API_REDDIT_CLIENT_ID,
     client_secret=API_REDDIT_CLIENT_SECRET,
     username=API_REDDIT_USERNAME,
     user_agent=API_REDDIT_USER_AGENT,
     password=API_REDDIT_PASSWORD,
+)
+
+psaw_api = PushshiftAPI()
+submissions = psaw_api.search_submissions(
+    subreddit=REDDIT_SUBS,
+    q="GIVEAWAY | Giveaway | giveaway | Free NFT | free NFT | free nft | Drop Wallet",
+    filter=["id"],
 )
 
 def isAccountOK():
@@ -209,13 +217,6 @@ def isAccountOK():
 isAccountOK()
 Nb_Giveaway = random.randint(MIN_GIVEAWAYS, MAX_GIVEAWAYS)
 print(f"Debut de session de {Nb_Giveaway} commentaires !")
-
-psaw_api = PushshiftAPI()
-submissions = psaw_api.search_submissions(
-    subreddit=REDDIT_SUBS,
-    q="GIVEAWAY | Giveaway | giveaway | Free NFT | free NFT | free nft | Drop Wallet",
-    filter=["id"],
-)
 
 if my_os != "linux":
     with open("misc\COM.txt", "r") as com:
@@ -259,21 +260,17 @@ while True:
                 continue
             now = datetime.now()
             current_time = now.strftime("%H:%M:%S")
-            print(
-                f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} Comment {Fore.LIGHTBLACK_EX}#{Fore.LIGHTWHITE_EX} {cnt}")
-            print(
-                f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} Current Time:{Fore.WHITE} {current_time}")
-            print(
-                f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} URL: {Fore.LIGHTBLUE_EX} {submission.url}")
-            print(
-                f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} Title:{Fore.LIGHTBLACK_EX} {submission.title}")
+            print(f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} Comment {Fore.LIGHTBLACK_EX}#{Fore.LIGHTWHITE_EX} {cnt}")
+            print(f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} Current Time:{Fore.WHITE} {current_time}")
+            print(f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} URL: {Fore.LIGHTBLUE_EX} {submission.url}")
+            print(f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} Title:{Fore.LIGHTBLACK_EX} {submission.title}")
 
             submission.upvote()
 
             comment = REDDIT_COMMENTS[random.randint(
                 0, len(REDDIT_COMMENTS) - 1)]
             emoji = REDDIT_EMOJIS[random.randint(0, len(REDDIT_EMOJIS) - 1)]
-            submission.reply(comment," ",OPENSEA_WALLET," ",emoji)
+            submission.reply(f"{comment} {OPENSEA_WALLET} {emoji}")
 
             try:
                 opensea_url = re.search(
@@ -286,12 +283,9 @@ while True:
                         opensea_url = opensea_url.split(")")[0]
                     print(
                         f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} OPENSEA: ", opensea_url)
-                    print(f"{Fore.RED}__"*60)
 
             except:
-                print(
-                    f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} No Opensea URL")
-                print(f"{Fore.RED}__"*60)
+                print(f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} No Opensea URL")
 
             secs_to_wait = random.randint(MIN_SECS_SLEEP, MAX_SECS_SLEEP)
             time.sleep(secs_to_wait)
@@ -299,15 +293,29 @@ while True:
             cnt += 1
             
             if my_os != "linux":
-                com = open("misc\COM.txt", "a")
-                com.write(submission.id+"\n")
-                with open("misc\COM.txt", "r") as com:
-                    AllAutors = com.readline()
+                try:
+                    com = open("misc\COM.txt", "a")
+                    com.write(submission.id+"\n")
+                    with open("misc\COM.txt", "r") as com:
+                        AllAutors = com.readline()
+                except:
+                    print("Probleme lors de l'enregistrement de l'id")
+                    sys.exit()
+                else:
+                    print(f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} Id:{Fore.WHITE} OK")
+                    print(f"{Fore.RED}__"*60)
             else:
-                com = open("misc/COM.txt", "a")
-                com.write(submission.id+"\n")
-                with open("misc/COM.txt", "r") as com:
-                    AllAutors = com.readline()
+                try:
+                    com = open("misc/COM.txt", "a")
+                    com.write(submission.id+"\n")
+                    with open("misc/COM.txt", "r") as com:
+                        AllAutors = com.readline()
+                except:
+                    print("Probleme lors de l'enregistrement de l'id")
+                    sys.exit()
+                else:
+                    print(f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} Id:{Fore.WHITE} OK")
+                    print(f"{Fore.RED}__"*60)
 
         if n_giveaways_found > Nb_Giveaway:
             pause = random.randint(MIN_BIG_SLEEP, MAX_BIG_SLEEP)
