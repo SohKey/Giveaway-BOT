@@ -171,6 +171,13 @@ MAX_SECS_SLEEP = eval(cfg["Bot"]["MAX_SECS_SLEEP"])
 MIN_BIG_SLEEP = eval(cfg["Bot"]["MIN_BIG_SLEEP"])
 MAX_BIG_SLEEP = eval(cfg["Bot"]["MAX_BIG_SLEEP"])
 
+if OPENSEA_WALLET != "":
+    print("Wallet: OK")
+else:
+    print("Wallet: No wallet !")
+    time.sleep(3)
+    sys.exit()
+
 praw_api = praw.Reddit(
     client_id=API_REDDIT_CLIENT_ID,
     client_secret=API_REDDIT_CLIENT_SECRET,
@@ -182,7 +189,7 @@ praw_api = praw.Reddit(
 psaw_api = PushshiftAPI()
 submissions = psaw_api.search_submissions(
     subreddit=REDDIT_SUBS,
-    q="GIVEAWAY | Giveaway | giveaway | Free NFT | free NFT | free nft | Drop Wallet",
+    q="GIVEAWAY|Giveaway|giveaway|NFT Giveaway",
     filter=["id"],
 )
 
