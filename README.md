@@ -20,7 +20,7 @@
 
 ```bash
 $ git clone https://github.com/SohKey/NFT-Giveaway-BOT.git #clone repository
-$ cd NFT-Giveaway-BOT/code
+$ cd NFT-Giveaway-BOT
 $ nano tools/config.ini #Edit account configuration and more !
 ```
 Minimal configuration:
@@ -32,6 +32,4 @@ Minimal configuration:
 
 ```bash
 $ python3 botr.py
-#or
-run start.bat
 ```
