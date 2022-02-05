@@ -1,6 +1,6 @@
 <h1 align=center>NFT-Giveaway-BOT</h1>
 <p align=center>
-  <img src="https://img.shields.io/badge/Made%20with-python-%23f7df1e-red?style=for-the-badge" alt="fully in javascript"/>
+  <img src="https://img.shields.io/badge/Made%20with-python-%23f7df1e?style=for-the-badge" alt="fully in javascript"/>
   <img src="https://img.shields.io/badge/Built%20With-%E2%99%A5-pink?style=for-the-badge" alt="built with muscles"/>
   <img src="https://img.shields.io/badge/Powered%20By-SOHKEY%20-blueviolet?style=for-the-badge" alt="powered by lsd"/>
 </p>
