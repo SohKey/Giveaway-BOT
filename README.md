@@ -12,6 +12,7 @@
 
 # Requirements
 
+- Git
 - Python >= 3 ```apt install python3-pip```
 - Pip
 
