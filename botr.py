@@ -164,11 +164,9 @@ def isAccountOK():
         commentd.upvote()
     except Exception as err:
         if str(err) == f"received 403 HTTP response":
-            print(
-                f"{Fore.RED}---------------------------------\n[{Fore.WHITE}Alerte{Fore.RED}] Compte bannis de Reddit !")
+            print(f"{Fore.RED}---------------------------------\n[{Fore.WHITE}Alerte{Fore.RED}] Compte bannis de Reddit !")
         else:
-            print(
-                f"{Fore.RED}---------------------------------\n[{Fore.WHITE}Alerte{Fore.RED}] Les informations du compte ne sont pas valides !")
+            print(f"{Fore.RED}---------------------------------\n[{Fore.WHITE}Alerte{Fore.RED}] Les informations du compte ne sont pas valides !")
         time.sleep(2)
         print("---------------------------------")
         time.sleep(2)
