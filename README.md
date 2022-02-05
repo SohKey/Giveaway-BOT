@@ -19,13 +19,14 @@
 ```bash
 $ git clone https://github.com/SohKey/NFT-Giveaway-BOT.git #clone repository
 $ cd NFT-Giveaway-BOT/code
-$ nano NFT-Giveaway-BOT/code/tools/config.ini #Edit account configuration and more !
+$ nano tools/config.ini #Edit account configuration and more !
 #enter your Reddit id and pass | API name, id and secret | NFT Wallet
-$ python3 botr.py
 ```
 
 ## Usage
 
 ```bash
-$ Launch start.bat
+$ python3 botr.py
+#or
+run start.bat
 ```
