@@ -117,19 +117,16 @@ while x != 1:
         compte = int(input(f"{Fore.LIGHTCYAN_EX}Choisir le bot n° {Fore.LIGHTYELLOW_EX}| {Fore.CYAN}1 {Fore.LIGHTYELLOW_EX}| {Fore.CYAN}2 {Fore.LIGHTYELLOW_EX}| {Fore.CYAN}3 {Fore.LIGHTYELLOW_EX}| : {Fore.LIGHTMAGENTA_EX}"))
         compte = Ncompte[compte]
         API_REDDIT_CLIENT_ID = eval(cfg[compte]["API_REDDIT_CLIENT_ID"])
-        API_REDDIT_CLIENT_SECRET = eval(
-            cfg[compte]["API_REDDIT_CLIENT_SECRET"])
+        API_REDDIT_CLIENT_SECRET = eval(cfg[compte]["API_REDDIT_CLIENT_SECRET"])
         API_REDDIT_USERNAME = eval(cfg[compte]["API_REDDIT_USERNAME"])
         API_REDDIT_USER_AGENT = eval(cfg[compte]["API_REDDIT_USER_AGENT"])
         API_REDDIT_PASSWORD = eval(cfg[compte]["API_REDDIT_PASSWORD"])
     except:
-        print(
-            f"{Fore.RED}[{Fore.LIGHTWHITE_EX}!{Fore.RED}] {Fore.LIGHTRED_EX}Saisie invalide ! {fontS.END}")
+        print(f"{Fore.RED}[{Fore.LIGHTWHITE_EX}!{Fore.RED}] {Fore.LIGHTRED_EX}Saisie invalide ! {fontS.END}")
         print(f"{Fore.RED}__"*60)
     else:
         x = 1
 
-os.system("cls")
 NoCompte = f"""{fontS.BOLD}{Fore.LIGHTRED_EX}{compte}"""
 print(NoCompte)
 
