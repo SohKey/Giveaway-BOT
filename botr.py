@@ -158,33 +158,37 @@ praw_api = praw.Reddit(
     password=API_REDDIT_PASSWORD,
 )
 
-try:
-    commentd = praw_api.comment("t3_qsj32h")
-    commentd.upvote()
-except Exception as err:
-    if str(err) == f"received 403 HTTP response":
-        print(
-            f"{Fore.RED}---------------------------------\n[{Fore.WHITE}Alerte{Fore.RED}] Compte bannis de Reddit !")
-    else:
-        print(
-            f"{Fore.RED}---------------------------------\n[{Fore.WHITE}Alerte{Fore.RED}] Les informations du compte ne sont pas valides !")
-    time.sleep(2)
-    print("---------------------------------")
-    time.sleep(2)
-    print(f"/{Fore.WHITE}!{Fore.RED}\ Fermeture du programe... /{Fore.WHITE}!{Fore.RED}\ \n--------------------------------- ")
-    cd = 5
-    print("")
-    for i in range(5):
-        time.sleep(1)
-        if my_os != "linux":
-            os.system("cls")
+def isAccountOK():
+    try:
+        commentd = praw_api.comment("t3_qsj32h")
+        commentd.upvote()
+    except Exception as err:
+        if str(err) == f"received 403 HTTP response":
+            print(
+                f"{Fore.RED}---------------------------------\n[{Fore.WHITE}Alerte{Fore.RED}] Compte bannis de Reddit !")
         else:
-            os.system("reset")
-        print(f"[{Fore.WHITE}!{Fore.RED}] ", cd)
-        cd -= 1
-    time.sleep(1)
-    sys.exit()
+            print(
+                f"{Fore.RED}---------------------------------\n[{Fore.WHITE}Alerte{Fore.RED}] Les informations du compte ne sont pas valides !")
+        time.sleep(2)
+        print("---------------------------------")
+        time.sleep(2)
+        print(f"/{Fore.WHITE}!{Fore.RED}\ Fermeture du programe... /{Fore.WHITE}!{Fore.RED}\ \n--------------------------------- ")
+        cd = 5
+        print("")
+        for i in range(5):
+            time.sleep(1)
+            if my_os != "linux":
+                os.system("cls")
+            else:
+                os.system("reset")
+            print(f"[{Fore.WHITE}!{Fore.RED}] ", cd)
+            cd -= 1
+        time.sleep(1)
+        sys.exit()
+    else:
+        print(f"{Fore.LIGHTCYAN_EX}Account state:{Fore.WHITE} OK")
 
+isAccountOK()
 Nb_Giveaway = random.randint(MIN_GIVEAWAYS, MAX_GIVEAWAYS)
 print(f"Debut de session de {Nb_Giveaway} commentaires !")
 
@@ -291,6 +295,7 @@ while True:
             pause = random.randint(MIN_BIG_SLEEP, MAX_BIG_SLEEP)
             print(f"Pause de {pause} secondes")
             time.sleep(pause)
+            isAccountOK()
             n_giveaways_found = 1
             Nb_Giveaway = random.randint(MIN_GIVEAWAYS, MAX_GIVEAWAYS)
             print(f"Debut de session de {Nb_Giveaway} commentaires !")
