@@ -1,6 +1,6 @@
 <h1 align=center>NFT-Giveaway-BOT</h1>
 <p align=center>
-  <a href="https://www.python.org/" <img src="https://img.shields.io/badge/Made%20with-python-%23f7df1e?style=for-the-badge" alt="fully in Python"/></a>
+  <a href="https://www.python.org/"> <img src="https://img.shields.io/badge/Made%20with-python-%23f7df1e?style=for-the-badge" alt="fully in Python"/></a>
   <a href="https://github.com/SohKey"><img src="https://img.shields.io/badge/Powered%20By-SOHKEY%20-blueviolet?style=for-the-badge" alt="powered by SohKey"/></a>
   <img src="https://img.shields.io/badge/Built%20With-Swa-red?style=for-the-badge" alt="built with Swa (guest)"/>
 </p>
