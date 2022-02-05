@@ -46,6 +46,7 @@ if my_os != "linux":
         os.system("pip install datetime")
     else:
         print("datetime: OK")
+    print(f"{Fore.LIGHTCYAN_EX}Pip install's with window: OK")
 else:
     try:
         import time,praw,random
@@ -81,7 +82,7 @@ else:
         os.system("pip3 install datetime")
         print("datetime: OK")
     else:
-        print("Pip install's with linux: OK")
+        print(f"{Fore.LIGHTCYAN_EX}Pip install's with linux: OK")
 
 
 init()
@@ -93,7 +94,7 @@ if my_os != "linux":
 else:
     cfg.read("tools/config.ini")
 
-banner = r"""	
+banner = r"""
 
                     ,----------------,              ,---------,
                ,-----------------------,          ,"        ,"|
