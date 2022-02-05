@@ -4,7 +4,7 @@
   <a href="https://github.com/SohKey"><img src="https://img.shields.io/badge/Powered%20By-SOHKEY%20-blueviolet?style=for-the-badge" alt="powered by SohKey"/></a>
   <a href="https://github.com/Yin-Yarr"><img src="https://img.shields.io/badge/Built%20With-Swa-red?style=for-the-badge" alt="built with Swa (guest)"/></a>
 </p>
-<h3 align=center>BOT finding giveaways on Reddit, comment with random sentences/emojies and wallet</h3>
+<h3 align=center>BOT finding giveaways on Reddit, comment with random sentences / emojis and wallet 💲</h3>
 
 - [Requirements](#requirements)
 - [Install](#install)
