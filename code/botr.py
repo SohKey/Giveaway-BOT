@@ -117,6 +117,7 @@ while x != 1:
     try:
         compte = int(input(f"{Fore.LIGHTCYAN_EX}Choisir le bot n° {Fore.LIGHTYELLOW_EX}| {Fore.CYAN}1 {Fore.LIGHTYELLOW_EX}| {Fore.CYAN}2 {Fore.LIGHTYELLOW_EX}| {Fore.CYAN}3 {Fore.LIGHTYELLOW_EX}| : {Fore.LIGHTMAGENTA_EX}"))
         compte = Ncompte[compte]
+        print(compte)
         API_REDDIT_CLIENT_ID = eval(cfg[compte]["API_REDDIT_CLIENT_ID"])
         API_REDDIT_CLIENT_SECRET = eval(cfg[compte]["API_REDDIT_CLIENT_SECRET"])
         API_REDDIT_USERNAME = eval(cfg[compte]["API_REDDIT_USERNAME"])
