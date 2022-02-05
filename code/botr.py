@@ -68,7 +68,7 @@ init()
 warnings.filterwarnings("ignore")
 cnt = 1
 cfg = configparser.RawConfigParser()
-cfg.read("tools\config.ini")
+cfg.read("config.ini")
 
 banner = r"""	
 
@@ -123,11 +123,8 @@ while x != 1:
         API_REDDIT_USER_AGENT = eval(cfg[compte]["API_REDDIT_USER_AGENT"])
         API_REDDIT_PASSWORD = eval(cfg[compte]["API_REDDIT_PASSWORD"])
     except KeyError:
-        if(compte not in Ncompte):
-            print(f"{Fore.RED}[{Fore.LIGHTWHITE_EX}!{Fore.RED}] {Fore.LIGHTRED_EX}Le compte n'existe pas ! {fontS.END}")
-            print(f"{Fore.RED}__"*60)
-        else:
-            x = 1
+        print(f"{Fore.RED}[{Fore.LIGHTWHITE_EX}!{Fore.RED}] {Fore.LIGHTRED_EX}Le compte n'existe pas ! {fontS.END}")
+        print(f"{Fore.RED}__"*60)
     except ValueError:
         print(f"{Fore.RED}[{Fore.LIGHTWHITE_EX}!{Fore.RED}] {Fore.LIGHTRED_EX}Saisie invalide, il faut saisir un chiffre ! {fontS.END}")
         print(f"{Fore.RED}__"*60)
