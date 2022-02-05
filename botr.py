@@ -273,7 +273,7 @@ while True:
             comment = REDDIT_COMMENTS[random.randint(
                 0, len(REDDIT_COMMENTS) - 1)]
             emoji = REDDIT_EMOJIS[random.randint(0, len(REDDIT_EMOJIS) - 1)]
-            submission.reply(f"{comment} {OPENSEA_WALLET} {emoji}")
+            submission.reply(comment," ",OPENSEA_WALLET," ",emoji)
 
             try:
                 opensea_url = re.search(
