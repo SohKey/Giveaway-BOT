@@ -87,7 +87,6 @@ else:
 
 init()
 warnings.filterwarnings("ignore")
-cnt = 1
 cfg = configparser.RawConfigParser()
 if my_os != "linux":
     cfg.read("tools\config.ini")
@@ -151,7 +150,7 @@ while x != 1:
     else:
         x = 1
 
-NoCompte = f"{fontS.BOLD}{Fore.LIGHTRED_EX}{compte}"
+NoCompte = f"{Fore.GREEN}[{Fore.WHITE}!{Fore.GREEN}] {Fore.LIGHTCYAN_EX}Account : {fontS.BOLD}{Fore.WHITE}{compte}"
 print(NoCompte)
 
 API_REDDIT_CLIENT_ID = eval(cfg[compte]["API_REDDIT_CLIENT_ID"])
@@ -162,7 +161,7 @@ API_REDDIT_PASSWORD = eval(cfg[compte]["API_REDDIT_PASSWORD"])
 
 REDDIT_SUBS = eval(cfg["Reddit"]["REDDIT_SUBS"])
 REDDIT_COMMENTS = eval(cfg["Reddit"]["REDDIT_COMMENTS"])
-REDDIT_EMOJIS = eval(cfg["Reddit"]["REDDIT_EMOJIS"])
+REDDIT_EMOJIS = ["🤞","🙏","❤️","💯","💸"]
 
 OPENSEA_WALLET = eval(cfg["Bot"]["OPENSEA_WALLET"])
 MAX_GIVEAWAYS = eval(cfg["Bot"]["MAX_GIVEAWAYS"])
@@ -173,9 +172,9 @@ MIN_BIG_SLEEP = eval(cfg["Bot"]["MIN_BIG_SLEEP"])
 MAX_BIG_SLEEP = eval(cfg["Bot"]["MAX_BIG_SLEEP"])
 
 if OPENSEA_WALLET != "":
-    print("Wallet: OK")
+    print(f"{Fore.GREEN}[{Fore.WHITE}!{Fore.GREEN}] {Fore.LIGHTCYAN_EX}Wallet:{Fore.WHITE} OK")
 else:
-    print("Wallet: No wallet !")
+    print(f"{Fore.GREEN}[{Fore.WHITE}!{Fore.RED}] {Fore.LIGHTCYAN_EX}Wallet:{Fore.WHITE} No wallet !")
     time.sleep(3)
     sys.exit()
 
@@ -220,11 +219,10 @@ def isAccountOK():
         time.sleep(1)
         sys.exit()
     else:
-        print(f"{Fore.LIGHTCYAN_EX}Account state:{Fore.WHITE} OK")
+        print(f"{Fore.GREEN}[{Fore.WHITE}!{Fore.GREEN}] {Fore.LIGHTCYAN_EX}Account state:{Fore.WHITE} OK")
 
 isAccountOK()
 Nb_Giveaway = random.randint(MIN_GIVEAWAYS, MAX_GIVEAWAYS)
-print(f"Debut de session de {Nb_Giveaway} commentaires !")
 
 if my_os != "linux":
     with open("misc\COM.txt", "r") as com:
@@ -233,110 +231,125 @@ else:
     with open("misc/COM.txt", "r") as com:
         AllAutors = com.readline()
 
+def SelectCat(subreddit):
+    condition = True
+    while condition:
+        catego = str(input(f"{Fore.GREEN}[{Fore.WHITE}!{Fore.GREEN}]{Fore.LIGHTCYAN_EX} Catégorie: {Fore.WHITE}({Fore.RED}hot {Fore.WHITE}/{Fore.LIGHTYELLOW_EX} new {Fore.WHITE}/ {Fore.MAGENTA}top{Fore.WHITE}){Fore.LIGHTCYAN_EX}:{Fore.WHITE} "))
+        subcatego = ""
+        if catego.lower() == "new":
+            subcatego = subreddit.new()
+            condition = False
+            return subcatego, catego.lower()
+        if catego.lower() == "hot":
+            subcatego = subreddit.hot()
+            condition = False
+            return subcatego, catego.lower()
+        if catego.lower() == "top":
+            subcatego = subreddit.top()
+            condition = False
+            return subcatego, catego.lower()
+        print(f"{Fore.WHITE}[{Fore.GREEN}O{Fore.WHITE}] Choix introuvable reformulez la catégorie voulue !")
 
-n_giveaways_found = 1
-
+subreddit = praw_api.subreddit(random.choice(REDDIT_SUBS))
+subcatego = SelectCat(subreddit) 
+print(f"{Fore.GREEN}[{Fore.WHITE}!{Fore.GREEN}]{Fore.LIGHTCYAN_EX} Debut de session de {Nb_Giveaway} commentaires !")
+cnt = 1
 while True:
-    try:
-        submission = next(submissions, None)
+    while Nb_Giveaway > cnt:
+        try:
+            submission = next(submissions, None)
+            if not submission:
+                break
+            submission = praw_api.submission(id=submission.id)
 
-        if not submission:
-            break
-
-        submission = praw_api.submission(id=submission.id)
-
-        if (
-            not submission.removed_by_category
-            and submission.selftext
-            and submission.id not in AllAutors
-        ):
-            text_from_op = submission.selftext
-
-            have_seen_post_before = False
-            for comment in submission.comments:
-                if comment.author.name == API_REDDIT_USERNAME:
-                    have_seen_post_before = True
-                elif comment.author.name == submission.author.name:
-                    text_from_op += comment.body
-
-            if have_seen_post_before:
-                continue
             if (
-                "opensea" not in text_from_op.lower()
-                and "opensea" not in submission.subreddit.display_name.lower()
+                not submission.removed_by_category
+                and submission.selftext
+                and submission.id not in AllAutors
             ):
-                continue
+                text_from_op = submission.selftext
+
+                have_seen_post_before = False
+                for comment in submission.comments:
+                    if comment.author.name == API_REDDIT_USERNAME:
+                        have_seen_post_before = True
+                    elif comment.author.name == submission.author.name:
+                        text_from_op += comment.body
+
+                if have_seen_post_before:
+                    continue
+                if (
+                    "opensea" not in text_from_op.lower()
+                    and "opensea" not in submission.subreddit.display_name.lower()
+                ):
+                    continue
+                now = datetime.now()
+                current_time = now.strftime("%H:%M:%S")
+                print(f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} Comment {Fore.LIGHTBLACK_EX}#{Fore.LIGHTWHITE_EX} {cnt}")
+                print(f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} Current Time:{Fore.WHITE} {current_time}")
+                print(f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} URL: {Fore.LIGHTBLUE_EX} {submission.url}")
+                print(f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} Title:{Fore.LIGHTBLACK_EX} {submission.title}")
+    
+                comment = random.choice(REDDIT_COMMENTS)
+                emoji = random.choice(REDDIT_EMOJIS)
+                submission.reply(f"{comment} {OPENSEA_WALLET} {emoji}")
+                submission.upvote()
+
+                try:
+                    opensea_url = re.search(
+                        "(?P<url>https?://opensea.io[^\s]+)", text_from_op
+                    ).group("url")
+                    if opensea_url:
+                        if "]" in opensea_url:
+                            opensea_url = opensea_url.split("]")[0]
+                        if ")" in opensea_url:
+                            opensea_url = opensea_url.split(")")[0]
+                        print(
+                            f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} OPENSEA: ", opensea_url)
+    
+                except:
+                    print(f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} No Opensea URL")
+    
+                secs_to_wait = random.randint(MIN_SECS_SLEEP, MAX_SECS_SLEEP)
+                time.sleep(secs_to_wait)
+                cnt += 1
+                
+                if my_os != "linux":
+                    try:
+                        com = open("misc\COM.txt", "a")
+                        com.write(submission.id+"\n")
+                        with open("misc\COM.txt", "r") as com:
+                            AllAutors = com.readline()
+                    except:
+                        print("Probleme lors de l'enregistrement de l'id")
+                        sys.exit()
+                    else:
+                        print(f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} Id:{Fore.WHITE} OK")
+                        print(f"{Fore.RED}__"*60)
+                else:
+                    try:
+                        com = open("misc/COM.txt", "a")
+                        com.write(submission.id+"\n")
+                        with open("misc/COM.txt", "r") as com:
+                            AllAutors = com.readline()
+                    except:
+                        print("Probleme lors de l'enregistrement de l'id")
+                        sys.exit()
+                    else:
+                        print(f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} Id:{Fore.WHITE} OK")
+                        print(f"{Fore.RED}__"*60)
+            #else: DEBUG
+            #    print("invalid post")
+        except:
             now = datetime.now()
             current_time = now.strftime("%H:%M:%S")
-            print(f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} Comment {Fore.LIGHTBLACK_EX}#{Fore.LIGHTWHITE_EX} {cnt}")
-            print(f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} Current Time:{Fore.WHITE} {current_time}")
-            print(f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} URL: {Fore.LIGHTBLUE_EX} {submission.url}")
-            print(f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} Title:{Fore.LIGHTBLACK_EX} {submission.title}")
-
-            submission.upvote()
-
-            comment = REDDIT_COMMENTS[random.randint(
-                0, len(REDDIT_COMMENTS) - 1)]
-            emoji = REDDIT_EMOJIS[random.randint(0, len(REDDIT_EMOJIS) - 1)]
-            submission.reply(f"{comment} {OPENSEA_WALLET} {emoji}")
-
-            try:
-                opensea_url = re.search(
-                    "(?P<url>https?://opensea.io[^\s]+)", text_from_op
-                ).group("url")
-                if opensea_url:
-                    if "]" in opensea_url:
-                        opensea_url = opensea_url.split("]")[0]
-                    if ")" in opensea_url:
-                        opensea_url = opensea_url.split(")")[0]
-                    print(
-                        f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} OPENSEA: ", opensea_url)
-
-            except:
-                print(f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} No Opensea URL")
-
-            secs_to_wait = random.randint(MIN_SECS_SLEEP, MAX_SECS_SLEEP)
-            time.sleep(secs_to_wait)
-            n_giveaways_found += 1
-            cnt += 1
-            
-            if my_os != "linux":
-                try:
-                    com = open("misc\COM.txt", "a")
-                    com.write(submission.id+"\n")
-                    with open("misc\COM.txt", "r") as com:
-                        AllAutors = com.readline()
-                except:
-                    print("Probleme lors de l'enregistrement de l'id")
-                    sys.exit()
-                else:
-                    print(f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} Id:{Fore.WHITE} OK")
-                    print(f"{Fore.RED}__"*60)
-            else:
-                try:
-                    com = open("misc/COM.txt", "a")
-                    com.write(submission.id+"\n")
-                    with open("misc/COM.txt", "r") as com:
-                        AllAutors = com.readline()
-                except:
-                    print("Probleme lors de l'enregistrement de l'id")
-                    sys.exit()
-                else:
-                    print(f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} Id:{Fore.WHITE} OK")
-                    print(f"{Fore.RED}__"*60)
-
-        if n_giveaways_found > Nb_Giveaway:
-            pause = random.randint(MIN_BIG_SLEEP, MAX_BIG_SLEEP)
-            print(f"Pause de {pause} secondes")
-            time.sleep(pause)
-            isAccountOK()
-            n_giveaways_found = 1
-            Nb_Giveaway = random.randint(MIN_GIVEAWAYS, MAX_GIVEAWAYS)
-            print(f"Debut de session de {Nb_Giveaway} commentaires !")
+            print(f"{Fore.WHITE}{current_time} | No Giveaway!")
             print(f"{Fore.RED}__"*60)
-
-    except:
-        now = datetime.now()
-        current_time = now.strftime("%H:%M:%S")
-        print(f"{Fore.WHITE}{current_time} | No Giveaway!")
-        print(f"{Fore.RED}__"*60)
+    
+    pause = random.randint(MIN_BIG_SLEEP, MAX_BIG_SLEEP)
+    print(f"Pause de {pause} secondes")
+    time.sleep(pause)
+    isAccountOK()
+    Nb_Giveaway = random.randint(MIN_GIVEAWAYS, MAX_GIVEAWAYS) 
+    print(f"Debut de session de {Nb_Giveaway} commentaires !")
+    print(f"{Fore.RED}__"*60)
