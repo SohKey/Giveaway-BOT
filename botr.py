@@ -231,29 +231,33 @@ else:
     with open("misc/COM.txt", "r") as com:
         AllAutors = com.readline()
 
-def SelectCat(subreddit):
-    condition = True
-    while condition:
-        catego = str(input(f"{Fore.GREEN}[{Fore.WHITE}!{Fore.GREEN}]{Fore.LIGHTCYAN_EX} Catégorie: {Fore.WHITE}({Fore.RED}hot {Fore.WHITE}/{Fore.LIGHTYELLOW_EX} new {Fore.WHITE}/ {Fore.MAGENTA}top{Fore.WHITE}){Fore.LIGHTCYAN_EX}:{Fore.WHITE} "))
-        subcatego = ""
-        if catego.lower() == "new":
-            subcatego = subreddit.new()
-            condition = False
-            return subcatego, catego.lower()
-        if catego.lower() == "hot":
-            subcatego = subreddit.hot()
-            condition = False
-            return subcatego, catego.lower()
-        if catego.lower() == "top":
-            subcatego = subreddit.top()
-            condition = False
-            return subcatego, catego.lower()
-        print(f"{Fore.WHITE}[{Fore.GREEN}O{Fore.WHITE}] Choix introuvable reformulez la catégorie voulue !")
-
-subreddit = praw_api.subreddit(random.choice(REDDIT_SUBS))
-subcatego = SelectCat(subreddit) 
+#def SelectCat(subreddit):
+#    condition = True
+#    while condition:
+#        catego = str(input(f"{Fore.GREEN}[{Fore.WHITE}!{Fore.GREEN}]{Fore.LIGHTCYAN_EX} Catégorie: {Fore.WHITE}({Fore.RED}hot {Fore.WHITE}/{Fore.LIGHTYELLOW_EX} new {Fore.WHITE}/ {Fore.MAGENTA}top{Fore.WHITE}){Fore.LIGHTCYAN_EX}:{Fore.WHITE} "))
+#        subcatego = ""
+#        if catego.lower() == "new":
+#            subcatego = subreddit.new()
+#            condition = False
+#            return subcatego, catego.lower()
+#        if catego.lower() == "hot":
+#            subcatego = subreddit.hot()
+#            condition = False
+#            return subcatego, catego.lower()
+#        if catego.lower() == "top":
+#            subcatego = subreddit.top()
+#            condition = False
+#            return subcatego, catego.lower()
+#        print(f"{Fore.WHITE}[{Fore.GREEN}O{Fore.WHITE}] Choix introuvable reformulez la catégorie voulue !")
+#
+#subreddit = praw_api.subreddit(random.choice(REDDIT_SUBS))
+#subcatego = SelectCat(subreddit) 
 print(f"{Fore.GREEN}[{Fore.WHITE}!{Fore.GREEN}]{Fore.LIGHTCYAN_EX} Debut de session de {Nb_Giveaway} commentaires !")
+print(f"{Fore.RED}__"*60)
 cnt = 1
+
+submission = submissions, None
+
 while True:
     while Nb_Giveaway > cnt:
         try:
@@ -283,17 +287,21 @@ while True:
                     and "opensea" not in submission.subreddit.display_name.lower()
                 ):
                     continue
+                try:
+                    comment = random.choice(REDDIT_COMMENTS)
+                    emoji = random.choice(REDDIT_EMOJIS)
+                    submission.reply(f"{comment} {OPENSEA_WALLET} {emoji}")
+                    submission.upvote()
+                except:
+                    print("Reply error")
+                    break
+
                 now = datetime.now()
                 current_time = now.strftime("%H:%M:%S")
                 print(f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} Comment {Fore.LIGHTBLACK_EX}#{Fore.LIGHTWHITE_EX} {cnt}")
                 print(f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} Current Time:{Fore.WHITE} {current_time}")
                 print(f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} URL: {Fore.LIGHTBLUE_EX} {submission.url}")
                 print(f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} Title:{Fore.LIGHTBLACK_EX} {submission.title}")
-    
-                comment = random.choice(REDDIT_COMMENTS)
-                emoji = random.choice(REDDIT_EMOJIS)
-                submission.reply(f"{comment} {OPENSEA_WALLET} {emoji}")
-                submission.upvote()
 
                 try:
                     opensea_url = re.search(
