@@ -1,5 +1,7 @@
 import os,re,warnings,configparser,sys
 
+from attr import field
+
 my_os = sys.platform
 print("Currently on ",my_os)
 try :
@@ -189,8 +191,9 @@ praw_api = praw.Reddit(
 psaw_api = PushshiftAPI()
 submissions = psaw_api.search_submissions(
     subreddit=REDDIT_SUBS,
-    q="GIVEAWAY | Giveaway | giveaway | Free NFT | free NFT | free nft",
+    q="nft giveway",
     filter=["id"],
+    sort="new",
 )
 
 def isAccountOK():
@@ -250,10 +253,11 @@ else:
 #            return subcatego, catego.lower()
 #        print(f"{Fore.WHITE}[{Fore.GREEN}O{Fore.WHITE}] Choix introuvable reformulez la catégorie voulue !")
 #
-#subreddit = praw_api.subreddit(random.choice(REDDIT_SUBS))
+#subreddit = praw_api.subreddit(random.choice(REDDIT_SUBS)) # praw_api.subreddit(random.choice(REDDIT_SUBS)).new()
 #subcatego = SelectCat(subreddit) 
 print(f"{Fore.GREEN}[{Fore.WHITE}!{Fore.GREEN}]{Fore.LIGHTCYAN_EX} Debut de session de {Nb_Giveaway} commentaires !")
 print(f"{Fore.RED}__"*60)
+#praw_api.subreddit(random.choice(REDDIT_SUBS)).new()
 cnt = 1
 
 submission = submissions, None
@@ -294,6 +298,7 @@ while True:
                     submission.upvote()
                 except:
                     print("Reply error")
+                    isAccountOK()
                     break
 
                 now = datetime.now()
@@ -346,7 +351,7 @@ while True:
                     else:
                         print(f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} Id:{Fore.WHITE} OK")
                         print(f"{Fore.RED}__"*60)
-            #else: DEBUG
+            #else: #DEBUG
             #    print("invalid post")
         except:
             now = datetime.now()
