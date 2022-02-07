@@ -191,7 +191,7 @@ praw_api = praw.Reddit(
 psaw_api = PushshiftAPI()
 submissions = psaw_api.search_submissions(
     subreddit=REDDIT_SUBS,
-    q="nft giveway",
+    q="nft | giveway",
     filter=["id"],
     sort="new",
 )
@@ -233,31 +233,8 @@ if my_os != "linux":
 else:
     with open("misc/COM.txt", "r") as com:
         AllAutors = com.readline()
-
-#def SelectCat(subreddit):
-#    condition = True
-#    while condition:
-#        catego = str(input(f"{Fore.GREEN}[{Fore.WHITE}!{Fore.GREEN}]{Fore.LIGHTCYAN_EX} Catégorie: {Fore.WHITE}({Fore.RED}hot {Fore.WHITE}/{Fore.LIGHTYELLOW_EX} new {Fore.WHITE}/ {Fore.MAGENTA}top{Fore.WHITE}){Fore.LIGHTCYAN_EX}:{Fore.WHITE} "))
-#        subcatego = ""
-#        if catego.lower() == "new":
-#            subcatego = subreddit.new()
-#            condition = False
-#            return subcatego, catego.lower()
-#        if catego.lower() == "hot":
-#            subcatego = subreddit.hot()
-#            condition = False
-#            return subcatego, catego.lower()
-#        if catego.lower() == "top":
-#            subcatego = subreddit.top()
-#            condition = False
-#            return subcatego, catego.lower()
-#        print(f"{Fore.WHITE}[{Fore.GREEN}O{Fore.WHITE}] Choix introuvable reformulez la catégorie voulue !")
-#
-#subreddit = praw_api.subreddit(random.choice(REDDIT_SUBS)) # praw_api.subreddit(random.choice(REDDIT_SUBS)).new()
-#subcatego = SelectCat(subreddit) 
 print(f"{Fore.GREEN}[{Fore.WHITE}!{Fore.GREEN}]{Fore.LIGHTCYAN_EX} Debut de session de {Nb_Giveaway} commentaires !")
 print(f"{Fore.RED}__"*60)
-#praw_api.subreddit(random.choice(REDDIT_SUBS)).new()
 cnt = 1
 
 submission = submissions, None
