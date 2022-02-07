@@ -151,6 +151,10 @@ while x != 1:
         print(f"{Fore.RED}__"*60)
     else:
         x = 1
+if my_os != "linux":
+    os.system("cls")
+else:
+    os.system("reset")
 
 NoCompte = f"{Fore.GREEN}[{Fore.WHITE}!{Fore.GREEN}] {Fore.LIGHTCYAN_EX}Account : {fontS.BOLD}{Fore.WHITE}{compte}"
 print(NoCompte)
@@ -190,10 +194,10 @@ praw_api = praw.Reddit(
 
 psaw_api = PushshiftAPI()
 submissions = psaw_api.search_submissions(
+    q="giveway",
     subreddit=REDDIT_SUBS,
-    q="nft | giveway",
     filter=["id"],
-    sort="new",
+    #sort="new"
 )
 
 def isAccountOK():
@@ -233,6 +237,7 @@ if my_os != "linux":
 else:
     with open("misc/COM.txt", "r") as com:
         AllAutors = com.readline()
+
 print(f"{Fore.GREEN}[{Fore.WHITE}!{Fore.GREEN}]{Fore.LIGHTCYAN_EX} Debut de session de {Nb_Giveaway} commentaires !")
 print(f"{Fore.RED}__"*60)
 cnt = 1
