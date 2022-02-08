@@ -191,13 +191,12 @@ praw_api = praw.Reddit(
     user_agent=API_REDDIT_USER_AGENT,
     password=API_REDDIT_PASSWORD,
 )
-
 psaw_api = PushshiftAPI()
 submissions = psaw_api.search_submissions(
-    q="giveway",
+    q="nft giveway",
     subreddit=REDDIT_SUBS,
     filter=["id"],
-    #sort="new"
+    sort="new",
 )
 
 def isAccountOK():
@@ -247,9 +246,11 @@ submission = submissions, None
 while True:
     while Nb_Giveaway > cnt:
         try:
+            #print(submission)
             submission = next(submissions, None)
             if not submission:
-                break
+                print("no sub")
+                submission = next(submissions, None)
             submission = praw_api.submission(id=submission.id)
 
             if (
@@ -259,15 +260,15 @@ while True:
             ):
                 text_from_op = submission.selftext
 
-                have_seen_post_before = False
-                for comment in submission.comments:
-                    if comment.author.name == API_REDDIT_USERNAME:
-                        have_seen_post_before = True
-                    elif comment.author.name == submission.author.name:
-                        text_from_op += comment.body
-
-                if have_seen_post_before:
-                    continue
+                #have_seen_post_before = False
+                #for comment in submission.comments:
+                #    if comment.author.name == API_REDDIT_USERNAME:
+                #        have_seen_post_before = True
+                #    elif comment.author.name == submission.author.name:
+                #        text_from_op += comment.body
+                #
+                #if have_seen_post_before:
+                #    continue
                 if (
                     "opensea" not in text_from_op.lower()
                     and "opensea" not in submission.subreddit.display_name.lower()
