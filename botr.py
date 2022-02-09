@@ -196,7 +196,7 @@ submissions = psaw_api.search_submissions(
     q="nft giveway",
     subreddit=REDDIT_SUBS,
     filter=["id"],
-    sort="new",
+    sort="new", 
 )
 
 def isAccountOK():
@@ -241,18 +241,17 @@ print(f"{Fore.GREEN}[{Fore.WHITE}!{Fore.GREEN}]{Fore.LIGHTCYAN_EX} Debut de sess
 print(f"{Fore.RED}__"*60)
 cnt = 1
 
-submission = submissions, None
-
 while True:
     while Nb_Giveaway > cnt:
         try:
-            #print(submission)
+            print(submission," ", submission.id)
             submission = next(submissions, None)
             if not submission:
                 print("no sub")
-                submission = next(submissions, None)
+                break
             submission = praw_api.submission(id=submission.id)
-
+            with open("misc\COM.txt", "r") as com:
+                AllAutors = com.readline()
             if (
                 not submission.removed_by_category
                 and submission.selftext
@@ -260,15 +259,15 @@ while True:
             ):
                 text_from_op = submission.selftext
 
-                #have_seen_post_before = False
-                #for comment in submission.comments:
-                #    if comment.author.name == API_REDDIT_USERNAME:
-                #        have_seen_post_before = True
-                #    elif comment.author.name == submission.author.name:
-                #        text_from_op += comment.body
-                #
-                #if have_seen_post_before:
-                #    continue
+                have_seen_post_before = False
+                for comment in submission.comments:
+                    if comment.author.name == API_REDDIT_USERNAME:
+                        have_seen_post_before = True
+                    elif comment.author.name == submission.author.name:
+                        text_from_op += comment.body
+                
+                if have_seen_post_before:
+                    continue
                 if (
                     "opensea" not in text_from_op.lower()
                     and "opensea" not in submission.subreddit.display_name.lower()
@@ -341,6 +340,7 @@ while True:
             current_time = now.strftime("%H:%M:%S")
             print(f"{Fore.WHITE}{current_time} | No Giveaway!")
             print(f"{Fore.RED}__"*60)
+            time.sleep(3)
     
     pause = random.randint(MIN_BIG_SLEEP, MAX_BIG_SLEEP)
     print(f"Pause de {pause} secondes")
