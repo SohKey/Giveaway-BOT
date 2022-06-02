@@ -33,3 +33,13 @@ Minimal configuration:
 ```bash
 $ python3 botr.py
 ```
+
+## Discord webhook
+
+Go on your discord server setting :
+
+![image](https://user-images.githubusercontent.com/45180021/171704468-64e8eb15-2224-43ba-8e1b-fc0fae35cb10.png)
+
+Create a new webhook and copy past the URL in the config.ini file !
+
+
