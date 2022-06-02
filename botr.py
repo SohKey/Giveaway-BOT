@@ -259,13 +259,13 @@ def start():
                     text_from_op = submission.selftext
                     have_seen_post_before = False
                     for comment in submission.comments:
-                        if comment.author.name == API_REDDIT_USERNAME or comment.author.name == "AutoModerator":
+                        if comment.author.name == API_REDDIT_USERNAME:
                             have_seen_post_before = True
                         elif comment.author.name == submission.author.name:
                             text_from_op += comment.body
 
                     if have_seen_post_before:
-                        #print(f'post deja vu {submission.id}') #DEBUG
+                        print(f'LOG: post deja vu {submission.id}') #DEBUG
                         continue
                     if (
                         "opensea" not in text_from_op.lower()
@@ -335,12 +335,14 @@ def start():
                     cnt += 1
                     secs_to_wait = random.randint(MIN_SECS_SLEEP, MAX_SECS_SLEEP)
                     time.sleep(secs_to_wait)
+                else:
+                    print(f"LOG: {submission} is not a valid submission")
             except ValueError as err: #DEBUG
                 #print("invalid post")
                 #print(err)
                 continue
             except: #DEBUG
-                #print("invalid post")
+                print("invalid post")
                 continue
             secs_to_wait = random.randint(1, 2)
             time.sleep(secs_to_wait)
