@@ -209,7 +209,7 @@ def recherche(REDDIT_SUBS):
     topH = praw_api.subreddit(subreddit).search(query="nft giveaway",sort="top",time_filter="hour")
     topW = praw_api.subreddit(subreddit).search(query="nft giveaway",sort="top",time_filter="week")
     hot = praw_api.subreddit(subreddit).search(query="nft giveaway",sort="hot")
-    listeR = [newF,topD,topH,hot]
+    listeR = [newF,topD,topH,topW,hot]
     return random.choice(listeR)
 
 def start():
@@ -241,118 +241,127 @@ def start():
     embed.add_embed_field(name='ㅤ', value= f'{subs}\nㅤ', inline=True)
     webhook.add_embed(embed)
     webhook.execute()
-
+    webhook.remove_embeds()
+    time.sleep(2)
     #END WEBHOOK
 
     cnt = 1
     print("Bot shearching for giveways...")
     while Nb_Giveaway > cnt:
-        for submission in recherche(REDDIT_SUBS):
-            with open("misc\COM.txt", "r") as com:
-                id_com = com.readline()
-            try:
-                if (
-                    not submission.removed_by_category
-                    and submission.selftext
-                    and submission.id not in id_com
-                ):
-                    text_from_op = submission.selftext
-                    have_seen_post_before = False
-                    for comment in submission.comments:
-                        if comment.author.name == API_REDDIT_USERNAME:
-                            have_seen_post_before = True
-                        elif comment.author.name == submission.author.name:
-                            text_from_op += comment.body
-
-                    if have_seen_post_before:
-                        print(f'LOG: post deja vu {submission.id}') #DEBUG
-                        continue
+        if cnt > Nb_Giveaway:
+            break
+        else:
+            for submission in recherche(REDDIT_SUBS):
+                with open("misc\COM.txt", "r") as com:
+                    id_com = com.readline()
+                try:
                     if (
-                        "opensea" not in text_from_op.lower()
-                        and "opensea" not in submission.subreddit.display_name.lower()
+                        not submission.removed_by_category
+                        #and submission.selftext
+                        and submission.id not in id_com
                     ):
-                        continue
-                    try:
-                        comment = random.choice(REDDIT_COMMENTS)
-                        emoji = random.choice(REDDIT_EMOJIS)
-                        submission.reply(f"{comment} {OPENSEA_WALLET} {emoji}")
-                        submission.upvote()
-                    except:
-                        print("Reply error")
-                        isAccountOK()
-                        continue
-                    try:
-                        com = open(f"misc/COM.txt", "a")
-                        com.write(submission.id+"\n")
-                        with open(f"misc/COM.txt", "r") as com:
-                            id_com = com.readline()
-                    except :
-                        print("Probleme lors de l'enregistrement de l'id")
-                        sys.exit()
-                    now = datetime.now()
-                    current_time = now.strftime("%H:%M:%S")
-                    print(f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} Comment {Fore.LIGHTBLACK_EX}#{Fore.LIGHTWHITE_EX} {cnt}")
-                    print(f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} Current Time:{Fore.WHITE} {current_time}")
-                    print(f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} URL: {Fore.LIGHTBLUE_EX} {submission.url}")
-                    print(f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} Title:{Fore.LIGHTBLACK_EX} {submission.title}")
-                    print(f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} Id: {Fore.LIGHTBLUE_EX}{id_com}{Fore.WHITE}")
+                        text_from_op = submission.selftext
+                        have_seen_post_before = False
+                        for comment in submission.comments:
+                            if comment.author.name == API_REDDIT_USERNAME:
+                                have_seen_post_before = True
+                            elif comment.author.name == submission.author.name:
+                                text_from_op += comment.body
 
-                    try:
-                        opensea_url = re.search(
-                            "(?P<url>https?://opensea.io[^\s]+)", text_from_op
-                        ).group("url")
-                        if opensea_url:
-                            if "]" in opensea_url:
-                                opensea_url = opensea_url.split("]")[0]
-                            if ")" in opensea_url:
-                                opensea_url = opensea_url.split(")")[0]
-                            print(
-                                f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} OPENSEA: ", opensea_url)
+                        if have_seen_post_before:
+                            print(f'LOG: post deja vu {submission.id}') #DEBUG
+                            continue
+                        if (
+                            "opensea" not in text_from_op.lower()
+                            and "opensea" not in submission.subreddit.display_name.lower()
+                        ):
+                            continue
+                        try:
+                            comment = random.choice(REDDIT_COMMENTS)
+                            emoji = random.choice(REDDIT_EMOJIS)
+                            submission.reply(f"{comment} {OPENSEA_WALLET} {emoji}")
+                            submission.upvote()
+                        except:
+                            print("Reply error")
+                            isAccountOK()
+                            continue
+                        try:
+                            com = open(f"misc/COM.txt", "a")
+                            com.write(submission.id+"\n")
+                            with open(f"misc/COM.txt", "r") as com:
+                                id_com = com.readline()
+                        except :
+                            print("Probleme lors de l'enregistrement de l'id")
+                            sys.exit()
+                        now = datetime.now()
+                        current_time = now.strftime("%H:%M:%S")
+                        print(f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} Comment {Fore.LIGHTBLACK_EX}#{Fore.LIGHTWHITE_EX} {cnt}")
+                        print(f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} Current Time:{Fore.WHITE} {current_time}")
+                        print(f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} URL: {Fore.LIGHTBLUE_EX} {submission.url}")
+                        print(f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} Title:{Fore.LIGHTBLACK_EX} {submission.title}")
+                        print(f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} Id: {Fore.LIGHTBLUE_EX}{id_com}{Fore.WHITE}")
 
-                    except:
-                        print(f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} No Opensea URL")
-                    finally:
-                        print(f"{Fore.RED}__"*60)
-                    #WEBHOOK
-                    hexadecimal=""
-                    for i in range(6):
-                        hexadecimal +=random.choice('ABCDEF0123456789')
+                        try:
+                            opensea_url = re.search(
+                                "(?P<url>https?://opensea.io[^\s]+)", text_from_op
+                            ).group("url")
+                            if opensea_url:
+                                if "]" in opensea_url:
+                                    opensea_url = opensea_url.split("]")[0]
+                                if ")" in opensea_url:
+                                    opensea_url = opensea_url.split(")")[0]
+                                print(
+                                    f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} OPENSEA: ", opensea_url)
 
-                    embed = DiscordEmbed(title="[>] **Le bot a posté un commentaire !**", description="point faible: trop fort !", color=hexadecimal)
-                    # add gif to embed
-                    listgif = ["https://c.tenor.com/wAW9GrwqeEoAAAAM/domingo-popcorn.gif", "https://c.tenor.com/NgSabDXAUkkAAAAC/messi-messi-bud.gif", "https://c.tenor.com/5tVlz8y2CdYAAAAC/kameto-kcorp.gif", "https://c.tenor.com/wNxWV_SrS1sAAAAd/clin-doeil-wink.gif"]
-                    gif = random.choice(listgif)
-                    embed.set_thumbnail(url=gif, height=650, width=650)
-                    embed.set_author(name="SohKey's Bot", url="https://github.com/SohKey", icon_url="https://29.recreatiloups.com/wp-content/uploads/sites/2/2018/06/robot-stage-enfant.png")
-                    embed.add_embed_field(name='Nom du post :', value=f'{submission.title}', inline=False)
-                    embed.add_embed_field(name='Lien du post :', value=f'{submission.url}', inline=False)
-                    embed.add_embed_field(name='ID du post :', value=f'{submission.id}', inline=True)
-                    embed.add_embed_field(name='Commentaire :', value=f'{comment}', inline=True)
-                    embed.add_embed_field(name='Nombre de messages envoyés :', value=f'{cnt}', inline=False)
-                    webhook.add_embed(embed)
-                    webhook.execute()
-                    #END WEBHOOK
-                    cnt += 1
-                    secs_to_wait = random.randint(MIN_SECS_SLEEP, MAX_SECS_SLEEP)
-                    time.sleep(secs_to_wait)
-                else:
-                    print(f"LOG: {submission} is not a valid submission")
-            except ValueError as err: #DEBUG
-                #print("invalid post")
-                #print(err)
-                continue
-            except: #DEBUG
-                print("invalid post")
-                continue
-            secs_to_wait = random.randint(1, 2)
-            time.sleep(secs_to_wait)
-    #END POSTED MESSAGES
+                        except:
+                            print(f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} No Opensea URL")
+                        finally:
+                            print(f"{Fore.RED}__"*60)
+                        #WEBHOOK
+                        hexadecimal=""
+                        for i in range(6):
+                            hexadecimal +=random.choice('ABCDEF0123456789')
+
+                        embed = DiscordEmbed(title="[>] **Le bot a posté un commentaire !**", description="point faible: trop fort !", color=hexadecimal)
+                        # add gif to embed
+                        listgif = ["https://c.tenor.com/wAW9GrwqeEoAAAAM/domingo-popcorn.gif", "https://c.tenor.com/NgSabDXAUkkAAAAC/messi-messi-bud.gif", "https://c.tenor.com/5tVlz8y2CdYAAAAC/kameto-kcorp.gif", "https://c.tenor.com/wNxWV_SrS1sAAAAd/clin-doeil-wink.gif"]
+                        gif = random.choice(listgif)
+                        embed.set_thumbnail(url=gif, height=650, width=650)
+                        embed.set_author(name="SohKey's Bot", url="https://github.com/SohKey", icon_url="https://29.recreatiloups.com/wp-content/uploads/sites/2/2018/06/robot-stage-enfant.png")
+                        embed.add_embed_field(name='Nom du post :', value=f'{submission.title}', inline=False)
+                        embed.add_embed_field(name='Lien du post :', value=f'{submission.url}', inline=False)
+                        embed.add_embed_field(name='ID du post :', value=f'{submission.id}', inline=True)
+                        embed.add_embed_field(name='Commentaire :', value=f'{comment}', inline=True)
+                        embed.add_embed_field(name='Nombre de messages envoyés :', value=f'{cnt}', inline=False)
+                        webhook.add_embed(embed)
+                        webhook.execute()
+                        webhook.remove_embeds()
+                        #END WEBHOOK
+                        cnt += 1
+                        if cnt > Nb_Giveaway:
+                            break
+                        secs_to_wait = random.randint(MIN_SECS_SLEEP, MAX_SECS_SLEEP)
+                        time.sleep(secs_to_wait)
+                    else:
+                        print(f"LOG: {submission} is not a valid submission")
+                except ValueError as err: #DEBUG
+                    #print("invalid post")
+                    #print(err)
+                    continue
+                except: #DEBUG
+                    print("invalid post")
+                    continue
+                secs_to_wait = random.randint(1, 2)
+                time.sleep(secs_to_wait)
+    #END     POSTED MESSAGES
     pause = random.randint(MIN_BIG_SLEEP, MAX_BIG_SLEEP)
     pauseE = DiscordEmbed(title="[>] **Le bot fait une pause !**", description="Et oui il faut bien le refroidir :snowflake:  ", color="f1330a")
     pauseE.set_thumbnail(url="https://images-ext-2.discordapp.net/external/vDkk1QkR2I39SGV3_UL71Q-2EVvOG95weOjUdgEH5Uc/https/media.tenor.com/hxBBp7yis4sAAAPo/time-out-wait.mp4")
     pauseE.set_author(name="SohKey's Bot", url="https://github.com/SohKey", icon_url="https://29.recreatiloups.com/wp-content/uploads/sites/2/2018/06/robot-stage-enfant.png")
     pauseE.add_embed_field(name='Durée de la pause ', value=f'{pause} secondes !', inline=True)
-    webhook.execute()
+    webhook.add_embed(pauseE)
+    webhook.execute(pauseE)
+    webhook.remove_embeds()
     
     bot_pause(pause)
 start() #First launch
