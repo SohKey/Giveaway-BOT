@@ -1,7 +1,5 @@
 import os,re,warnings,configparser,sys
-
-from attr import field
-
+from math import ceil
 my_os = sys.platform
 print("Currently on ",my_os)
 try :
@@ -14,77 +12,36 @@ except:
     sys.exit()
 
 if my_os != "linux":
-    try:
-        import time,praw,random
-    except:
-        os.system("pip install requests")
-        os.system("pip install praw")
-        os.system("cls")
-    else:
-        print("time,praw,random : OK")
-    try:
-        from pystyle import Center, Anime, Colors, Colorate  # pip install pystyle
-    except:
-        os.system("pip install pystyle")
-        os.system("cls")
-    else:
-        print("pystyle: OK")
-    try:
-        from colorama import init, Fore  # pip install colorama
-    except:
-        os.system("pip install colorama")
-        os.system("cls")
-    else:
-        print("colorama: OK")
-    try:
-        from psaw import PushshiftAPI
-    except:
-        os.system("pip install psaw")
-    else:
-        print("psaw: OK")
-    try:
-        from datetime import datetime
-    except:
-        os.system("pip install datetime")
-    else:
-        print("datetime: OK")
-    print(f"{Fore.LIGHTCYAN_EX}Pip install's with window: OK")
+    x = "cls"
 else:
+    x = "reset"
+
+try:
+    import time,praw,random
+    from pystyle import Center, Anime, Colors, Colorate
+    from colorama import init, Fore
+    from psaw import PushshiftAPI
+    from datetime import datetime
+    from discord_webhook import DiscordWebhook, DiscordEmbed
+except:
+    os.system("pip install praw")
+    os.system("pip install pystyle")
+    os.system("pip install colorama")
+    os.system("pip install psaw")
+    os.system("pip install datetime")
+    os.system("pip3 install discord-webhook")
+    os.system(x)
     try:
-        import time,praw,random
+        os.system("python botr.py")
+        os.system("exit")
     except:
-        os.system("pip3 install requests")
-        os.system("pip3 install praw")
-        os.system("reset")
-    else:
-        print("time,praw,random: OK")
-    try:
-        from pystyle import Center, Anime, Colors, Colorate  # pip install pystyle
-    except:
-        os.system("pip3 install pystyle")
-        os.system("reset")
-    else:
-        print("pystyle: OK")
-    try:
-        from colorama import init, Fore  # pip install colorama
-    except:
-        os.system("pip3 install colorama")
-        os.system("reset")
-    else:
-        print("colorama: OK")
-    try:
-        from psaw import PushshiftAPI
-    except:
-        os.system("pip3 install psaw")
-    else:
-        print("psaw: OK")
-    try:
-        from datetime import datetime
-    except:
-        os.system("pip3 install datetime")
-        print("datetime: OK")
-    else:
-        print(f"{Fore.LIGHTCYAN_EX}Pip install's with linux: OK")
+        try:
+            os.system("python3 botr.py")
+            os.system("exit")
+        except:
+            print("reload script")
+else:
+    print("Installs: OK")
 
 
 init()
@@ -124,8 +81,7 @@ banner = r"""
         ╚═════╝  ╚═════╝    ╚═╝       ╚═╝  ╚═══╝╚═╝        ╚═╝   
 """[1:]
 
-Anime.Fade(Center.Center(banner), Colors.blue_to_purple,
-           Colorate.Horizontal, enter=True)
+Anime.Fade(Center.Center(banner), Colors.blue_to_purple,Colorate.Horizontal, enter=True)
 print(banner)
 
 
@@ -177,12 +133,15 @@ MAX_SECS_SLEEP = eval(cfg["Bot"]["MAX_SECS_SLEEP"])
 MIN_BIG_SLEEP = eval(cfg["Bot"]["MIN_BIG_SLEEP"])
 MAX_BIG_SLEEP = eval(cfg["Bot"]["MAX_BIG_SLEEP"])
 
+webhookurl = eval(cfg["Discord"]["webhookurl"])
+
 if OPENSEA_WALLET != "":
     print(f"{Fore.GREEN}[{Fore.WHITE}!{Fore.GREEN}] {Fore.LIGHTCYAN_EX}Wallet:{Fore.WHITE} OK")
 else:
     print(f"{Fore.GREEN}[{Fore.WHITE}!{Fore.RED}] {Fore.LIGHTCYAN_EX}Wallet:{Fore.WHITE} No wallet !")
     time.sleep(3)
     sys.exit()
+
 
 praw_api = praw.Reddit(
     client_id=API_REDDIT_CLIENT_ID,
@@ -192,12 +151,6 @@ praw_api = praw.Reddit(
     password=API_REDDIT_PASSWORD,
 )
 psaw_api = PushshiftAPI()
-submissions = psaw_api.search_submissions(
-    q="nft giveway",
-    subreddit=REDDIT_SUBS,
-    filter=["id"],
-    sort="new", 
-)
 
 def isAccountOK():
     try:
@@ -226,9 +179,21 @@ def isAccountOK():
         sys.exit()
     else:
         print(f"{Fore.GREEN}[{Fore.WHITE}!{Fore.GREEN}] {Fore.LIGHTCYAN_EX}Account state:{Fore.WHITE} OK")
-
+    
+def bot_pause(pause):
+    print(f"Pause de {pause} secondes")
+    time.sleep(pause)
+    isAccountOK()
+    Nb_Giveaway = random.randint(MIN_GIVEAWAYS, MAX_GIVEAWAYS) 
+    try:
+        start()
+        print(f"Debut de session de {Nb_Giveaway} commentaires !")
+        print(f"{Fore.RED}__"*60)
+    except:
+        print(f"{Fore.RED}Erreur lors du lancement du giveaway !{Fore.WHITE}")
+        sys.exit()
+    
 isAccountOK()
-Nb_Giveaway = random.randint(MIN_GIVEAWAYS, MAX_GIVEAWAYS)
 
 if my_os != "linux":
     with open("misc\COM.txt", "r") as com:
@@ -237,115 +202,155 @@ else:
     with open("misc/COM.txt", "r") as com:
         AllAutors = com.readline()
 
-print(f"{Fore.GREEN}[{Fore.WHITE}!{Fore.GREEN}]{Fore.LIGHTCYAN_EX} Debut de session de {Nb_Giveaway} commentaires !")
-print(f"{Fore.RED}__"*60)
-cnt = 1
+def recherche(REDDIT_SUBS):
+    subreddit = random.choice(REDDIT_SUBS)
+    newF = praw_api.subreddit(subreddit).search(query="nft giveaway",sort="new")
+    topD = praw_api.subreddit(subreddit).search(query="nft giveaway",sort="top",time_filter="day")
+    topH = praw_api.subreddit(subreddit).search(query="nft giveaway",sort="top",time_filter="hour")
+    topW = praw_api.subreddit(subreddit).search(query="nft giveaway",sort="top",time_filter="week")
+    hot = praw_api.subreddit(subreddit).search(query="nft giveaway",sort="hot")
+    listeR = [newF,topD,topH,hot]
+    return random.choice(listeR)
 
-while True:
-    while Nb_Giveaway > cnt:
-        try:
-            print(submission," ", submission.id)
-            submission = next(submissions, None)
-            if not submission:
-                print("no sub")
-                break
-            submission = praw_api.submission(id=submission.id)
-            with open("misc\COM.txt", "r") as com:
-                AllAutors = com.readline()
-            if (
-                not submission.removed_by_category
-                and submission.selftext
-                and submission.id not in AllAutors
-            ):
-                text_from_op = submission.selftext
-
-                have_seen_post_before = False
-                for comment in submission.comments:
-                    if comment.author.name == API_REDDIT_USERNAME:
-                        have_seen_post_before = True
-                    elif comment.author.name == submission.author.name:
-                        text_from_op += comment.body
-                
-                if have_seen_post_before:
-                    continue
-                if (
-                    "opensea" not in text_from_op.lower()
-                    and "opensea" not in submission.subreddit.display_name.lower()
-                ):
-                    continue
-                try:
-                    comment = random.choice(REDDIT_COMMENTS)
-                    emoji = random.choice(REDDIT_EMOJIS)
-                    submission.reply(f"{comment} {OPENSEA_WALLET} {emoji}")
-                    submission.upvote()
-                except:
-                    print("Reply error")
-                    isAccountOK()
-                    break
-
-                now = datetime.now()
-                current_time = now.strftime("%H:%M:%S")
-                print(f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} Comment {Fore.LIGHTBLACK_EX}#{Fore.LIGHTWHITE_EX} {cnt}")
-                print(f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} Current Time:{Fore.WHITE} {current_time}")
-                print(f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} URL: {Fore.LIGHTBLUE_EX} {submission.url}")
-                print(f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} Title:{Fore.LIGHTBLACK_EX} {submission.title}")
-
-                try:
-                    opensea_url = re.search(
-                        "(?P<url>https?://opensea.io[^\s]+)", text_from_op
-                    ).group("url")
-                    if opensea_url:
-                        if "]" in opensea_url:
-                            opensea_url = opensea_url.split("]")[0]
-                        if ")" in opensea_url:
-                            opensea_url = opensea_url.split(")")[0]
-                        print(
-                            f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} OPENSEA: ", opensea_url)
+def start():
     
-                except:
-                    print(f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} No Opensea URL")
-    
-                secs_to_wait = random.randint(MIN_SECS_SLEEP, MAX_SECS_SLEEP)
-                time.sleep(secs_to_wait)
-                cnt += 1
-                
-                if my_os != "linux":
-                    try:
-                        com = open("misc\COM.txt", "a")
-                        com.write(submission.id+"\n")
-                        with open("misc\COM.txt", "r") as com:
-                            AllAutors = com.readline()
-                    except:
-                        print("Probleme lors de l'enregistrement de l'id")
-                        sys.exit()
-                    else:
-                        print(f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} Id:{Fore.WHITE} OK")
-                        print(f"{Fore.RED}__"*60)
-                else:
-                    try:
-                        com = open("misc/COM.txt", "a")
-                        com.write(submission.id+"\n")
-                        with open("misc/COM.txt", "r") as com:
-                            AllAutors = com.readline()
-                    except:
-                        print("Probleme lors de l'enregistrement de l'id")
-                        sys.exit()
-                    else:
-                        print(f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} Id:{Fore.WHITE} OK")
-                        print(f"{Fore.RED}__"*60)
-            #else: #DEBUG
-            #    print("invalid post")
-        except:
-            now = datetime.now()
-            current_time = now.strftime("%H:%M:%S")
-            print(f"{Fore.WHITE}{current_time} | No Giveaway!")
-            print(f"{Fore.RED}__"*60)
-            time.sleep(3)
-    
-    pause = random.randint(MIN_BIG_SLEEP, MAX_BIG_SLEEP)
-    print(f"Pause de {pause} secondes")
-    time.sleep(pause)
-    isAccountOK()
-    Nb_Giveaway = random.randint(MIN_GIVEAWAYS, MAX_GIVEAWAYS) 
-    print(f"Debut de session de {Nb_Giveaway} commentaires !")
+    Nb_Giveaway = random.randint(MIN_GIVEAWAYS, MAX_GIVEAWAYS)
+    print(f"{Fore.GREEN}[{Fore.WHITE}!{Fore.GREEN}]{Fore.LIGHTCYAN_EX} Debut de session de {Nb_Giveaway} commentaires !")
     print(f"{Fore.RED}__"*60)
+
+    #WEBHOOK
+    webhook = DiscordWebhook(url=webhookurl, username="NFT Bot logger", avatar_url="https://upload.wikimedia.org/wikipedia/commons/2/24/NFT_Icon.png")
+
+    # create embed object for webhook
+    embed = DiscordEmbed(title="**[>]** Nouvelle session de commentaires !", description="```Le bot est parti chercher vos NFT's...```", color="f1330a")
+    # add gif to embed
+
+    embed.set_thumbnail(url='https://c.tenor.com/x8v1oNUOmg4AAAAd/rickroll-roll.gif')
+    embed.set_author(name="SohKey's Bot", url="https://github.com/SohKey", icon_url="https://29.recreatiloups.com/wp-content/uploads/sites/2/2018/06/robot-stage-enfant.png")
+    embed.add_embed_field(name='Nombre de commentaires: ', value=f'```{Nb_Giveaway}```', inline=False)
+    subs=""
+    x=0
+    while x < len(REDDIT_SUBS)//2:
+        subs += f"\n :white_check_mark: {REDDIT_SUBS[x]}"
+        x +=1
+    embed.add_embed_field(name=f'Nombre de subbredit : ㅤ{len(REDDIT_SUBS)}', value= f'{subs}\nㅤ', inline=True)
+    subs=""
+    while x < len(REDDIT_SUBS):
+            subs += f"\n :white_check_mark: {REDDIT_SUBS[x]}"
+            x +=1
+    embed.add_embed_field(name='ㅤ', value= f'{subs}\nㅤ', inline=True)
+    webhook.add_embed(embed)
+    webhook.execute()
+
+    #END WEBHOOK
+
+    cnt = 1
+    print("Bot shearching for giveways...")
+    while Nb_Giveaway > cnt:
+        for submission in recherche(REDDIT_SUBS):
+            with open("misc\COM.txt", "r") as com:
+                id_com = com.readline()
+            try:
+                if (
+                    not submission.removed_by_category
+                    and submission.selftext
+                    and submission.id not in id_com
+                ):
+                    text_from_op = submission.selftext
+                    have_seen_post_before = False
+                    for comment in submission.comments:
+                        if comment.author.name == API_REDDIT_USERNAME or comment.author.name == "AutoModerator":
+                            have_seen_post_before = True
+                        elif comment.author.name == submission.author.name:
+                            text_from_op += comment.body
+
+                    if have_seen_post_before:
+                        #print(f'post deja vu {submission.id}') #DEBUG
+                        continue
+                    if (
+                        "opensea" not in text_from_op.lower()
+                        and "opensea" not in submission.subreddit.display_name.lower()
+                    ):
+                        continue
+                    try:
+                        comment = random.choice(REDDIT_COMMENTS)
+                        emoji = random.choice(REDDIT_EMOJIS)
+                        submission.reply(f"{comment} {OPENSEA_WALLET} {emoji}")
+                        submission.upvote()
+                    except:
+                        print("Reply error")
+                        isAccountOK()
+                        continue
+                    try:
+                        com = open(f"misc/COM.txt", "a")
+                        com.write(submission.id+"\n")
+                        with open(f"misc/COM.txt", "r") as com:
+                            id_com = com.readline()
+                    except :
+                        print("Probleme lors de l'enregistrement de l'id")
+                        sys.exit()
+                    now = datetime.now()
+                    current_time = now.strftime("%H:%M:%S")
+                    print(f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} Comment {Fore.LIGHTBLACK_EX}#{Fore.LIGHTWHITE_EX} {cnt}")
+                    print(f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} Current Time:{Fore.WHITE} {current_time}")
+                    print(f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} URL: {Fore.LIGHTBLUE_EX} {submission.url}")
+                    print(f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} Title:{Fore.LIGHTBLACK_EX} {submission.title}")
+                    print(f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} Id: {Fore.LIGHTBLUE_EX}{id_com}{Fore.WHITE}")
+
+                    try:
+                        opensea_url = re.search(
+                            "(?P<url>https?://opensea.io[^\s]+)", text_from_op
+                        ).group("url")
+                        if opensea_url:
+                            if "]" in opensea_url:
+                                opensea_url = opensea_url.split("]")[0]
+                            if ")" in opensea_url:
+                                opensea_url = opensea_url.split(")")[0]
+                            print(
+                                f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} OPENSEA: ", opensea_url)
+
+                    except:
+                        print(f"{Fore.LIGHTGREEN_EX}[{Fore.LIGHTCYAN_EX}>{Fore.LIGHTGREEN_EX}]{Fore.MAGENTA} No Opensea URL")
+                    finally:
+                        print(f"{Fore.RED}__"*60)
+                    #WEBHOOK
+                    hexadecimal=""
+                    for i in range(6):
+                        hexadecimal +=random.choice('ABCDEF0123456789')
+
+                    embed = DiscordEmbed(title="[>] **Le bot a posté un commentaire !**", description="point faible: trop fort !", color=hexadecimal)
+                    # add gif to embed
+                    listgif = ["https://c.tenor.com/wAW9GrwqeEoAAAAM/domingo-popcorn.gif", "https://c.tenor.com/NgSabDXAUkkAAAAC/messi-messi-bud.gif", "https://c.tenor.com/5tVlz8y2CdYAAAAC/kameto-kcorp.gif", "https://c.tenor.com/wNxWV_SrS1sAAAAd/clin-doeil-wink.gif"]
+                    gif = random.choice(listgif)
+                    embed.set_thumbnail(url=gif, height=650, width=650)
+                    embed.set_author(name="SohKey's Bot", url="https://github.com/SohKey", icon_url="https://29.recreatiloups.com/wp-content/uploads/sites/2/2018/06/robot-stage-enfant.png")
+                    embed.add_embed_field(name='Nom du post :', value=f'{submission.title}', inline=False)
+                    embed.add_embed_field(name='Lien du post :', value=f'{submission.url}', inline=False)
+                    embed.add_embed_field(name='ID du post :', value=f'{submission.id}', inline=True)
+                    embed.add_embed_field(name='Commentaire :', value=f'{comment}', inline=True)
+                    embed.add_embed_field(name='Nombre de messages envoyés :', value=f'{cnt}', inline=False)
+                    webhook.add_embed(embed)
+                    webhook.execute()
+                    #END WEBHOOK
+                    cnt += 1
+                    secs_to_wait = random.randint(MIN_SECS_SLEEP, MAX_SECS_SLEEP)
+                    time.sleep(secs_to_wait)
+            except ValueError as err: #DEBUG
+                #print("invalid post")
+                #print(err)
+                continue
+            except: #DEBUG
+                #print("invalid post")
+                continue
+            secs_to_wait = random.randint(1, 2)
+            time.sleep(secs_to_wait)
+    #END POSTED MESSAGES
+    pause = random.randint(MIN_BIG_SLEEP, MAX_BIG_SLEEP)
+    pauseE = DiscordEmbed(title="[>] **Le bot fait une pause !**", description="Et oui il faut bien le refroidir :snowflake:  ", color="f1330a")
+    pauseE.set_thumbnail(url="https://images-ext-2.discordapp.net/external/vDkk1QkR2I39SGV3_UL71Q-2EVvOG95weOjUdgEH5Uc/https/media.tenor.com/hxBBp7yis4sAAAPo/time-out-wait.mp4")
+    pauseE.set_author(name="SohKey's Bot", url="https://github.com/SohKey", icon_url="https://29.recreatiloups.com/wp-content/uploads/sites/2/2018/06/robot-stage-enfant.png")
+    pauseE.add_embed_field(name='Durée de la pause ', value=f'{pause} secondes !', inline=True)
+    webhook.execute()
+    
+    bot_pause(pause)
+start() #First launch
