@@ -40,7 +40,7 @@ Go on your discord server setting :
 
 ![image](https://user-images.githubusercontent.com/45180021/171706282-99f7c1a6-3235-425b-bee3-0cf6ffce1f9f.png)
 
-Create a new webhook and copy past the URL in the config.ini file !
+Create a new webhook and copy past the URL in the `config.ini` file !
 
 When the bot start, you will see this message:<br>
 ![image](https://user-images.githubusercontent.com/45180021/171707425-4d233815-5cc6-4a0b-9517-dd93eec40939.png)
