@@ -19,7 +19,7 @@
 ## Install
 
 ```bash
-$ git clone https://github.com/SohKey/NFT-Giveaway-BOT.git #clone repository
+$ git clone https://github.com/SohKey/Giveaway-BOT.git #clone repository
 $ cd NFT-Giveaway-BOT
 $ nano tools/config.ini #Edit account configuration and more !
 ```
